@@ -9,8 +9,11 @@ public class TerrainGrid : MonoBehaviour {
     public float CellSize;
     public Vector2 Offset;
     bool[,] FreeTerrain;
-    Texture2D ColorArray;
+    Texture2D GridTexture;
+    float[] ColorArray;
+    //Заменить на floatArray
     Terrain terrain;
+    public Material GridMaterial;
 
     public Vector2Int LocationToGrid(Building building, Vector3 place)
     {
@@ -41,6 +44,11 @@ public class TerrainGrid : MonoBehaviour {
         return true;
     }
 
+    void FillCell(Vector2Int place, Color color)
+    {
+
+    }
+
     public bool PlaceBuilding(Building building, Vector2Int place)
     {
         if (!CheckPlace(building, place))
@@ -50,9 +58,12 @@ public class TerrainGrid : MonoBehaviour {
             for (int j = place.y; j < place.y + building.Size.y; j++)
             {
                 FreeTerrain[i, j] = false;
-                ColorArray.SetPixel(i, j, Color.red);
+                ColorArray[j * Size.x + i] = 0;
+                //ColorArray.SetPixel(i, j, Color.red);
             }
-        ColorArray.Apply();
+        GridMaterial.SetFloatArray("_CellArray", ColorArray);
+        //ColorArray.Apply();
+        Debug.Break();
         return true;
     }
 
@@ -64,41 +75,66 @@ public class TerrainGrid : MonoBehaviour {
             for (int j = place.y; j < place.y + building.Size.y; j++)
             {
                 FreeTerrain[i, j] = true;
-                ColorArray.SetPixel(i, j, Color.green);
+                ColorArray[j * Size.x + i] = 1;
+                Debug.Log((j * Size.x + i).ToString() + " " + ColorArray[j * Size.x + i]);
+                //ColorArray.SetPixel(i, j, Color.green);
             }
+        GridMaterial.SetFloatArray("_CellArray", ColorArray);
         Buildings.Remove(building);
-        ColorArray.Apply();
+        //ColorArray.Apply();
         return true;
     }
 
     public void SetGridVisibility(bool Visibility)
     {
         if (terrain == null) return;
-        terrain.materialTemplate.SetFloat("_DrawGrid", Visibility ? 1 : 0);
+        GridMaterial.SetFloat("_DrawGrid", Visibility ? 1 : 0);
     }
 
     // Use this for initialization
     void Start () {
+        //GridTexture = new Texture2D(Size.x * CellSize, Size.y * CellSize)
         Buildings = new Dictionary<Building, Vector2Int>();
         terrain = GetComponent<Terrain>();
         FreeTerrain = new bool[Size.x, Size.y];
-        ColorArray = new Texture2D(FreeTerrain.GetLength(0), FreeTerrain.GetLength(1));
+        ColorArray = new float[Size.x * Size.y];
+        //ColorArray = new Texture2D(FreeTerrain.GetLength(0), FreeTerrain.GetLength(1));
         for (int i = 0; i < Size.x; i++)
             for (int j = 0; j < Size.y; j++)
             {
                 FreeTerrain[i, j] = true;
-                ColorArray.SetPixel(i, j, Color.green);
+                ColorArray[j * Size.x + i] = 1;
+                //ColorArray.SetPixel(i, j, Color.green);
             }
-        ColorArray.Apply();
-        ColorArray.filterMode = FilterMode.Point;
+        //ColorArray.Apply();
+        //ColorArray.filterMode = FilterMode.Point;
         if (terrain == null) return;
-        terrain.materialTemplate.SetTexture("_GridColor", ColorArray);
-        terrain.materialTemplate.SetVector("_GridSize", new Vector4(Size.x, Size.y, 0, 0));
-        terrain.materialTemplate.SetFloat("_GridSpacing", CellSize);
-        terrain.materialTemplate.SetVector("_GridOffset", new Vector4(Offset.x, Offset.y, 0, 0));
+        //GridMaterial.SetTexture("_GridColor", ColorArray);
+        GridMaterial.SetVector("_GridSize", new Vector4(Size.x, Size.y, 0, 0));
+        GridMaterial.SetFloat("_GridSpacing", CellSize);
+        GridMaterial.SetVector("_GridOffset", new Vector4(Offset.x, Offset.y, 0, 0));
+        GridMaterial.SetFloatArray("_CellArray", ColorArray);
+        //GridMaterial.SetFloat("_GridColorArray0", )
     }
-	
-	// Update is called once per frame
-	void Update () {
+    
+    // Update is called once per frame
+    void Update ()
+    {
+        string arr = "";
+        for (int i = 0; i < Size.x; i++)
+            for (int j = 0; j < Size.y; j++)
+            {
+                arr += ColorArray[j * Size.x + i];
+            }
+        print(arr);
+        terrain.materialTemplate.SetFloatArray("_CellArray", ColorArray);
+        /* var arr = GridMaterial.GetFloatArray("_CellArray");
+         string str = "";
+         for (int i = 0; i < arr.Length; i++)
+             str += arr[i] + ", ";
+         Debug.Log(str);*/
+        /*for (int i = 0; i < ColorArray.Length; i++)
+            GridMaterial.SetFloat("_CellArray" + i.ToString(), ColorArray[i]);*/
+        //GridMaterial.
     }
 }

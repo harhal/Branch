@@ -761,6 +761,7 @@ MonoBehaviour:
   Size: {x: 10, y: 10}
   CellSize: 10
   Offset: {x: 100, y: 100}
+  GridMaterial: {fileID: 2100000, guid: 064c63edcfea3a140a3112c4ceb6d6f2, type: 2}
 --- !u!1001 &2011318976
 Prefab:
   m_ObjectHideFlags: 0

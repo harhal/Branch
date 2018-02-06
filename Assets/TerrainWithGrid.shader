@@ -43,6 +43,8 @@
 		float _GridSpacing;
 		half _UseUV;
 
+		uniform half _CellArray[100];
+
 		// Add instancing support for this shader. You need to check 'Enable Instancing' on materials that use the shader.
 		// See https://docs.unity3d.com/Manual/GPUInstancing.html for more information about instancing.
 		// #pragma instancing_options assumeuniformscaling
@@ -52,13 +54,13 @@
 
 		void surf (Input IN, inout SurfaceOutputStandard o) {
 			// Albedo comes from a texture tinted by color 
-			float3 localPos = IN.worldPos +  mul(unity_ObjectToWorld, float4(0,0,0,1)).xyz;
+			float3 localPos = IN.worldPos -  mul(unity_ObjectToWorld, float4(0,0,0,1)).xyz;
 			float2 pos = float2(fmod(abs(localPos.x - _GridOffset.x), _GridSpacing), fmod(abs(localPos.z - _GridOffset.y), _GridSpacing));
 			float2 TexPos;
 			if (_UseUV > 0.5)
 				TexPos = IN.uv_MainTex;
 			else
-				TexPos = pos / _GridSpacing;
+				TexPos = float2(localPos.x, localPos.z) / _GridSpacing;
 			fixed4 c = tex2D (_MainTex, TexPos) * _Color;
 			o.Albedo = c.rgb;
 			if (_DrawGrid > 0.5)
@@ -68,7 +70,12 @@
 				//if (localPos.x >= _GridOffset.x && localPos.z >= _GridOffset.y && localPos.x <= MaxVal.x && localPos.z <= MaxVal.y)
 				if (CurrCell.x >= 0 && CurrCell.x < _GridSize.x && CurrCell.y >= 0 && CurrCell.y < _GridSize.y)
 					if ((pos.x > _GridThickness) && (pos.x < _GridSpacing - _GridThickness) && (pos.y > _GridThickness) && (pos.y < _GridSpacing - _GridThickness))
-						o.Emission = tex2D(_GridColor, float2(CurrCell.x / _GridSize.x, CurrCell.y / _GridSize.y));
+					{
+						if (_CellArray[CurrCell.y * _GridSize.x + CurrCell.x] == 0)
+							o.Emission = float4(1, 0, 0, 1);//tex2D(_GridColor, float2(CurrCell.x / _GridSize.x, CurrCell.y / _GridSize.y));
+						else
+							o.Emission = float4(0, 1, 0, 1);
+					}
 			}
 			// Metallic and smoothness come from slider variables
 			o.Metallic = _Metallic;
