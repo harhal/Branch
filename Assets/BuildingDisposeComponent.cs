@@ -34,12 +34,14 @@ public class BuildingDisposeComponent : MonoBehaviour
         else
             renderer.material.color = Color.white;
         if (Input.GetMouseButtonUp(0))
+        {
             if (terrain.CheckPlace(building, CellLocation))
             {
                 terrain.PlaceBuilding(building, CellLocation);
-                //GameObject newBuilding = GameObject.Instantiate(gameObject);
-                //terrain.PlaceBuilding(newBuilding.GetComponent<Building>(), CellLocation);
+                terrain.SetGridVisibility(false);
                 Destroy(this);
             }
+        }
+        else terrain.SetGridVisibility(true);
     }
 }
