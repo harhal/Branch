@@ -7,8 +7,6 @@ public class CameraControl : MonoBehaviour {
     [SerializeField]
     float Speed = 1;
     [SerializeField]
-    float MouseTouchOffsetFactor = 1;
-    [SerializeField]
     float VerticalSpeed = 1;
     [SerializeField]
     float DeltaAngle = 90;
@@ -18,19 +16,21 @@ public class CameraControl : MonoBehaviour {
     float MaxHeight = 70;
     [SerializeField]
     float StableSreenPurcent = 90;
+    [SerializeField]
+    Vector3 VectorUp = Vector3.forward;
+    [SerializeField]
+    Vector3 VectorRight = Vector3.right;
     new Camera camera;
-    Vector2 lastMousePos;
 
 
 	// Use this for initialization
 	void Start () {
         camera = GetComponent<Camera>();
-        lastMousePos = Input.mousePosition;
     }
 
     void HorisontalMove(Vector2 offset)
     {
-        Vector3 CamOffset = new Vector3(offset.x, 0, offset.y) * Speed * Time.deltaTime;
+        Vector3 CamOffset = (VectorRight * offset.x + VectorUp * offset.y) * Speed * Time.deltaTime;
         Vector3 rotation = transform.rotation.eulerAngles;
         rotation.x = 0;
         CamOffset = Quaternion.Euler(rotation) * CamOffset;
@@ -40,7 +40,7 @@ public class CameraControl : MonoBehaviour {
     void VertiacalMove(float offset, Vector3 target)
     {
         Vector3 forwardOffset = target * offset* VerticalSpeed * Time.deltaTime;
-        if ((transform.position + forwardOffset).y > MinHeight && (transform.position + forwardOffset).y < MaxHeight)
+        //if ((transform.position + forwardOffset).z > MinHeight && (transform.position + forwardOffset).z < MaxHeight)
             transform.position += forwardOffset;
     }
 
@@ -61,7 +61,6 @@ public class CameraControl : MonoBehaviour {
         Vector2 camOffset = Vector2.zero;
         float stablePurcent = StableSreenPurcent / 100;
         float triggerPurcent = (1 - stablePurcent) / 2;
-        Vector2 mousePos = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
         camOffset.x += Mathf.Clamp(Input.mousePosition.x / triggerPurcent / Screen.width  - 1                                 , -1, 0);
         camOffset.x += Mathf.Clamp(Input.mousePosition.x / triggerPurcent / Screen.width  - 1 - stablePurcent / triggerPurcent,  0, 1);
         camOffset.y += Mathf.Clamp(Input.mousePosition.y / triggerPurcent / Screen.height - 1                                 , -1, 0);

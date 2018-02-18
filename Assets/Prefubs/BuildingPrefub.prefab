@@ -194,6 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
+  BuildingRenderer: {fileID: 23248369988875438}
+  cost: 20
 --- !u!114 &114626301046158080
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -4,12 +4,15 @@ using UnityEngine;
 
 public class BilboardComponent : MonoBehaviour {
 
-    public new Camera camera;
+    new Camera camera;
 
     // Use this for initialization
     void Start () {
-		
-	}
+        GameObject finded = GameObject.Find("Main Camera");
+        if (finded != null)
+            camera = finded.GetComponent<Camera>();
+
+    }
 	
 	// Update is called once per frame
 	void Update ()

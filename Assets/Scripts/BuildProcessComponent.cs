@@ -20,6 +20,8 @@ public class BuildProcessComponent : MonoBehaviour {
 
     private void OnDisable()
     {
+        if (progressbar == null) return;
+        if (progressbar.gameObject == null) return;
         GameObject.Destroy(progressbar.gameObject);
     }
 

@@ -18,14 +18,14 @@ Shader "Custom/TerrainWithGrid" {
 		[HideInInspector] _Normal1("Normal 1 (G)", 2D) = "bump" {}
 		[HideInInspector] _Normal0("Normal 0 (R)", 2D) = "bump" {}
 
-		_DrawGrid("DrawGrid", Range(0,1)) = 0
 		_Glossiness("Smoothness", Range(0,1)) = 0.5
 		_Metallic("Metallic", Range(0,1)) = 0.0
 		_GridSize("GridSize", Vector) = (0,0,0,0)
 		_GridOffset("GridOffset", Vector) = (0,0,0,0)
-		_GridSpacing("Spacing", float) = 10
+		_GridSpacing("Spacing", Vector) = (10, 10, 0, 0)
 		_GridThickness("GridThickness", float) = 0.05
 	}
+
 	SubShader {
 		Tags { "RenderType"="Opaque" }
 		LOD 200
@@ -57,7 +57,7 @@ Shader "Custom/TerrainWithGrid" {
 		float4 _GridSize;
 		float4 _GridOffset;
 		float _GridThickness;
-		float _GridSpacing;
+		float4 _GridSpacing;
 
 		uniform half _CellArray[1000];
 
@@ -99,14 +99,14 @@ Shader "Custom/TerrainWithGrid" {
 			o.Smoothness = _Glossiness;
 			o.Alpha = 1;
 
-			float3 localPos = IN.worldPos -  mul(unity_ObjectToWorld, float4(0,0,0,1)).xyz;
-			float2 pos = float2(fmod(abs(localPos.x + _GridOffset.x), _GridSpacing), fmod(abs(localPos.z + _GridOffset.y), _GridSpacing));
 			if (_DrawGrid > 0.5)
 			{
-				float2 CurrCell = float2(floor((localPos.x - _GridOffset.x) / _GridSpacing), floor((localPos.z - _GridOffset.y) / _GridSpacing));
-				float2 MaxVal = _GridSize.xy * _GridSpacing + _GridOffset.xy;
+				float3 localPos = IN.worldPos - mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xyz;
+				float2 pos = float2(fmod(abs(localPos.x + _GridOffset.x), _GridSpacing.x), fmod(abs(localPos.z + _GridOffset.y), _GridSpacing.y));
+				float2 CurrCell = float2(floor((localPos.x - _GridOffset.x) / _GridSpacing.x), floor((localPos.z - _GridOffset.y) / _GridSpacing.y));
+				float2 MaxVal = float2(_GridSize.x * _GridSpacing.x, _GridSize.y * _GridSpacing.y) + _GridOffset.xy;
 				if (CurrCell.x >= 0 && CurrCell.x < _GridSize.x && CurrCell.y >= 0 && CurrCell.y < _GridSize.y)
-					if ((pos.x > _GridThickness) && (pos.x < _GridSpacing - _GridThickness) && (pos.y > _GridThickness) && (pos.y < _GridSpacing - _GridThickness))
+					if ((pos.x > _GridThickness) && (pos.x < _GridSpacing.x - _GridThickness) && (pos.y > _GridThickness) && (pos.y < _GridSpacing.y - _GridThickness))
 					{
 						uint ind = CurrCell.y * _GridSize.x + CurrCell.x;
 						uint fi = ind / 24;

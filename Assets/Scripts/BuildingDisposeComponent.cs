@@ -6,11 +6,19 @@ public class BuildingDisposeComponent : MonoBehaviour
 {
 
     //public GameObject terrain;
-    public Camera mainCamera;
+    Camera mainCamera;
     private Building building;
     new Renderer renderer;
-    TerrainGrid grid;
+    GridComponent grid;
     bool Rotated;
+    ResourceStorage resources;
+    [SerializeField]
+    public Vector3 FlyOffset = new Vector3(0, 1, 0);
+
+    public bool IsFree()
+    {
+        return building == null;
+    }
 
     public void SetBuilding(Building building)
     {
@@ -21,7 +29,14 @@ public class BuildingDisposeComponent : MonoBehaviour
     // Use this for initialization
     private void Awake()
     {
-        grid = GetComponent<TerrainGrid>();
+        grid = GetComponent<GridComponent>();
+        GameObject finded = GameObject.Find("Main Camera");
+        print("binded");
+        if (finded != null)
+            mainCamera = finded.GetComponent<Camera>();
+        finded = GameObject.Find("ResourceStorage");
+        if (finded != null)
+            resources = finded.GetComponent<ResourceStorage>();
     }
 
     private void OnEnable()
@@ -33,7 +48,7 @@ public class BuildingDisposeComponent : MonoBehaviour
         }
         Rotated = false;
         grid.SetGridVisibility(true);
-        renderer = building.GetComponent<Renderer>();
+        renderer = building.BuildingRenderer;
     }
 
     private void OnDisable()
@@ -64,23 +79,32 @@ public class BuildingDisposeComponent : MonoBehaviour
         if (!Physics.Raycast(mainCamera.ScreenPointToRay(Input.mousePosition), out hit, float.PositiveInfinity, 1 << 8)) return;
         if (gameObject != hit.collider.gameObject) return;
         Vector2Int CellLocation;
-        building.transform.position = grid.GridToLocation(CellLocation = grid.LocationToGrid(building, hit.point));
-        if (!grid.CheckPlace(building, CellLocation))
+        building.transform.position = grid.GridToLocation(CellLocation = grid.LocationToGrid(building, hit.point)) + FlyOffset;
+        if (!grid.CheckPlace(building, CellLocation) && renderer != null)
             renderer.material.color = Color.red;
         else
             renderer.material.color = Color.white;
-        if (Input.GetMouseButtonUp(1))
+        /*if (Input.GetMouseButtonUp(1))
         {
             Rotate90();
-        }
-            if (Input.GetMouseButtonUp(0))
+        }*/
+        if (Input.GetMouseButtonUp(0))
         {
             if (grid.CheckPlace(building, CellLocation))
             {
-                grid.PlaceBuilding(building, CellLocation);
-                building.GetComponent<BuildProcessComponent>().enabled = true;
-                building = null;
-                enabled = false;
+                if (building.Cost <= resources.Money)
+                {
+                    resources.SpendMoney(building.Cost);
+                    building.transform.position = grid.GridToLocation(CellLocation = grid.LocationToGrid(building, hit.point));
+                    grid.PlaceBuilding(building, CellLocation);
+                    building.GetComponent<BuildProcessComponent>().enabled = true;
+                    building = null;
+                    enabled = false;
+                }
+                else
+                {
+                    print("Нужно больше золота"); //ToDo Make output to user
+                }
             }
         }
     }
