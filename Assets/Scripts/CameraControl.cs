@@ -7,17 +7,15 @@ public class CameraControl : MonoBehaviour {
     [SerializeField]
     float Speed = 1;
     [SerializeField]
-    float VerticalSpeed = 1;
+    float ZoomSpeed = 1;
     [SerializeField]
-    float DeltaAngle = 90;
+    float MinDistance = 30;
     [SerializeField]
-    float MinHeight = 30;
-    [SerializeField]
-    float MaxHeight = 70;
+    float MaxDistance = 70;
     [SerializeField]
     float StableSreenPurcent = 90;
     [SerializeField]
-    Vector3 VectorUp = Vector3.forward;
+    Vector3 VectorUp = Vector3.up;
     [SerializeField]
     Vector3 VectorRight = Vector3.right;
     new Camera camera;
@@ -39,23 +37,16 @@ public class CameraControl : MonoBehaviour {
 
     void VertiacalMove(float offset, Vector3 target)
     {
-        Vector3 forwardOffset = target * offset* VerticalSpeed * Time.deltaTime;
-        //if ((transform.position + forwardOffset).z > MinHeight && (transform.position + forwardOffset).z < MaxHeight)
+        Vector3 forwardOffset = target * offset* ZoomSpeed * Time.deltaTime;
+        if (Mathf.Abs((transform.position + forwardOffset - target).z) < MinDistance && offset > 0) return;
+        if (Mathf.Abs((transform.position + forwardOffset - target).z) > MaxDistance && offset < 0) return;
             transform.position += forwardOffset;
-    }
-
-    void Rotate(float offset)
-    {
-        Vector3 rotator = transform.rotation.eulerAngles;
-        rotator.y += offset * DeltaAngle * Time.deltaTime;
-        transform.rotation = Quaternion.Euler(rotator);
     }
 
 	void Update () {
         //KeyboardControl
         HorisontalMove(new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")));
         VertiacalMove(Input.GetAxis("Keyboard Zoom"), transform.forward);
-        Rotate(Input.GetAxis("Yaw"));
         //MouseControl
         VertiacalMove(Input.GetAxis("Mouse ScrollWheel"), camera.ScreenPointToRay(Input.mousePosition).direction);
         Vector2 camOffset = Vector2.zero;

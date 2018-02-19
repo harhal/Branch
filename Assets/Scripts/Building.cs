@@ -8,4 +8,6 @@ public class Building : MonoBehaviour {
     public uint Cost { get { return cost; } private set { cost = value; } }
     [SerializeField]
     private uint cost;
+
+    public virtual void Select() { }
 }

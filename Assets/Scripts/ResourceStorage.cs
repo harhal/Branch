@@ -3,62 +3,67 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public struct HumanResource
-{
-    public uint Alive { get; private set; }
-    public uint Free { get; private set; }
-    public uint Max;
-
-    public bool Send(uint count)
-    {
-        if (Free >= count)
-        {
-            Free -= count;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    public bool Hire(uint count)
-    {
-        if (Alive + count <= Max)
-        {
-            Alive += count;
-            Free += count;
-            return true;
-        }
-        else
-        {
-            Free += Max - Alive;
-            Alive = Max;
-            return false;
-        }
-    }
-
-    public bool Dead(uint count) //Use only for human on mission
-    {
-        if (Alive >= count)
-        {
-            Alive -= count;
-            return true;
-        }
-        else
-            return false;
-    }
-
-    public void Return(uint count)
-    {
-        Free += count;
-    }
-
-    public override string ToString()
-    {
-        return Free.ToString() + " / " + Alive.ToString() + " (" + Max.ToString() + ")";
-    }
-}
-
 public class ResourceStorage : MonoBehaviour {
+
+    [System.Serializable]
+    public struct HumanResource
+    {
+        [SerializeField]
+        uint _alive;
+        public uint Alive { get { return _alive; } private set { _alive = value; } }
+        [SerializeField]
+        uint _free;
+        public uint Free { get { return _free; } private set { _free = value; } }
+        public uint Max;
+
+        public bool Send(uint count)
+        {
+            if (Free >= count)
+            {
+                Free -= count;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public bool Hire(uint count)
+        {
+            if (Alive + count <= Max)
+            {
+                Alive += count;
+                Free += count;
+                return true;
+            }
+            else
+            {
+                Free += Max - Alive;
+                Alive = Max;
+                return false;
+            }
+        }
+
+        public bool Dead(uint count) //Use only for human on mission
+        {
+            if (Alive >= count)
+            {
+                Alive -= count;
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public void Return(uint count)
+        {
+            Free += count;
+        }
+
+        public override string ToString()
+        {
+            return Free.ToString() + " / " + Alive.ToString() + " (" + Max.ToString() + ")";
+        }
+    }
 
     [SerializeField]
     private uint money;
@@ -90,11 +95,8 @@ public class ResourceStorage : MonoBehaviour {
     Text OperativesOutput;
     Text D_PersonnelOutput;
 
-    public uint StartMoney = 100;
-
     // Use this for initialization
     void Start () {
-        AddMoney(StartMoney);
         GameObject finded = GameObject.Find("MoneyOutput");
         if (finded != null)
             MoneyOutput = finded.GetComponent<Text>();

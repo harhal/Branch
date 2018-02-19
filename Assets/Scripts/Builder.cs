@@ -7,28 +7,22 @@ public class Builder : MonoBehaviour {
     public Building[] Prototype;
 
     BuildingDisposeComponent bdc;
-    //Camera mainCamera;
 
     public void Start()
     {
-        GameObject finded = GameObject.Find("Terrain");
+        GameObject finded = GameObject.Find("Base");
         if (finded != null)
         {
             bdc = finded.GetComponent<BuildingDisposeComponent>();
-            print("Connected with BDC on terrain");
+            print("Connected with base BDC");
         }
-        else
-        {
-            finded = GameObject.Find("Base");
-            if (finded != null)
-            {
-                bdc = finded.GetComponent<BuildingDisposeComponent>();
-                print("Connected with base BDC");
-            }
-        }
-        /*finded = GameObject.Find("Main Camera");
-        if (finded != null)
-            mainCamera = finded.GetComponent<Camera>();*/
+    }
+
+    public void Dig()
+    {
+        if (bdc == null) { print("BDC is null"); return; }
+        if (!bdc.IsFree()) return;
+        bdc.EnableToDig();
     }
 
     public void Build(int index)
