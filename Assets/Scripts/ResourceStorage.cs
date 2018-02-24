@@ -85,18 +85,35 @@ public class ResourceStorage : MonoBehaviour {
         Money += Amount;
     }
 
+    public void AddAnomalObject(AnomalObject anomalObject)
+    {
+        anomalObjects.Add(anomalObject);
+        entrepotUI.RefreshData();
+    }
+
+    public void CreateAnomalObject(AnomalObject prototype)
+    {
+        var newObj = GameObject.Instantiate<AnomalObject>(prototype);
+        newObj.ID = (int)Random.Range(100, 500);
+        AddAnomalObject(newObj);
+    }
+
     public HumanResource Scientists;
     public HumanResource Operatives;
     public HumanResource D_Personnel;
     private List<ObjectStorage> storages;
+    public List<AnomalObject> anomalObjects;
 
     Text MoneyOutput;
     Text ScientistsOutput;
     Text OperativesOutput;
     Text D_PersonnelOutput;
+    EntrepotUI entrepotUI;
 
     // Use this for initialization
     void Start () {
+        anomalObjects = new List<AnomalObject>();
+        storages = new List<ObjectStorage>();
         GameObject finded = GameObject.Find("MoneyOutput");
         if (finded != null)
             MoneyOutput = finded.GetComponent<Text>();
@@ -109,6 +126,9 @@ public class ResourceStorage : MonoBehaviour {
         finded = GameObject.Find("D_PersonnelOutput");
         if (finded != null)
             D_PersonnelOutput = finded.GetComponent<Text>();
+        finded = GameObject.Find("EntrepotUI");
+        if (finded != null)
+            entrepotUI = finded.GetComponent<EntrepotUI>();
     }
 	
 	// Update is called once per frame

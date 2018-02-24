@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     public ObjectStorageUI objectStorageUI;
     public AnomalObjectUI anomalObjectUI;
+    public EntrepotUI entrepotUI;
 
     public void SetBuildMode(Building building)
     {
@@ -63,13 +64,31 @@ public class PlayerController : MonoBehaviour
     public void SetStorageMode(ObjectStorage storage)
     {
         ResetMode();
+        objectStorageUI.SetObjectStorage(storage);
         CurrentSelection = storage.gameObject;
         CurrentMode = ControlMode.StorageControl;
     }
 
-    public void SetSAnomalObjectMode(AnomalObject anomalObject)
+    public void SetAnomalObjectMode(AnomalObject anomalObject)
     {
+        if (CurrentMode == ControlMode.StorageControl)
+        {
+            if (CurrentSelection != null)
+            {
+                var storage = CurrentSelection.GetComponent<ObjectStorage>();
+                if (storage != null)
+                    if (storage.enabled && storage.anomalObject == null && anomalObject.storage == null)
+                    {
+                        storage.anomalObject = anomalObject;
+                        anomalObject.storage = storage;
+                        entrepotUI.RefreshData();
+                        objectStorageUI.SetObjectStorage(storage);
+                        return;
+                    }
+            }
+        }
         ResetMode();
+        anomalObjectUI.SetAnomalObject(anomalObject);
         CurrentSelection = anomalObject.gameObject;
         CurrentMode = ControlMode.AnomalObjectControl;
     }
@@ -85,6 +104,9 @@ public class PlayerController : MonoBehaviour
         finded = GameObject.Find("Main Camera");
         if (finded != null)
             mainCamera = finded.GetComponent<Camera>();
+        finded = GameObject.Find("EntrepotUI");
+        if (finded != null)
+            entrepotUI = finded.GetComponent<EntrepotUI>();
         /*finded = GameObject.Find("StorageInfo");
         if (finded != null)
             objectStorageUI = finded.GetComponent<ObjectStorageUI>();
@@ -107,13 +129,13 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        Vector2Int? cellLocation = GetCellLocation();
-        if (cellLocation == null) return;
         if (Input.GetAxis("Cancel") != 0)
         {
             ResetMode();
             CurrentMode = ControlMode.BaseControl;
         }
+        Vector2Int? cellLocation = GetCellLocation();
+        if (cellLocation == null) return;
         switch (CurrentMode)
         {
             case ControlMode.Build:
@@ -130,6 +152,28 @@ public class PlayerController : MonoBehaviour
                         Dig(cellLocation.Value);
                     break;
                 }
+            case ControlMode.AnomalObjectControl:
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        var storage = grid.GetBuildingAt(cellLocation.Value) as ObjectStorage;
+                        if (storage != null)
+                        {
+                            if (storage.anomalObject == null && storage.enabled)
+                            {
+                                var anomalObject = CurrentSelection.GetComponent<AnomalObject>();
+                                if (anomalObject != null ? anomalObject.storage == null : false)
+                                {
+                                    storage.anomalObject = anomalObject;
+                                    anomalObject.storage = storage;
+                                    entrepotUI.RefreshData();
+                                }
+                            }
+                            SetStorageMode(storage);
+                        }
+                    }
+                    break;
+                }
             default:
                 {
                     if (Input.GetMouseButtonDown(0))
@@ -137,8 +181,8 @@ public class PlayerController : MonoBehaviour
                         var storage = grid.GetBuildingAt(cellLocation.Value) as ObjectStorage;
                         if (storage != null)
                         {
-                            objectStorageUI.SetObjectStorage(storage);
-                            CurrentMode = ControlMode.StorageControl;
+                            if (storage.enabled)
+                                SetStorageMode(storage);
                         }
                     }
                     break;

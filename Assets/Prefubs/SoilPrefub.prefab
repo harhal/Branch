@@ -151,7 +151,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Size: {x: 1, y: 1}
   BuildingRenderer: {fileID: 23506965028218070}
-  cost: 0
+  cost: 5
   MaxDurability: 0
   HighLightType: 0
   ResetHighLight: 1

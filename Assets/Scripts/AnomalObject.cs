@@ -12,6 +12,7 @@ public struct ImpactFactors
     public float SpaceFactor;         //Угроза: Фактор воздействия на пространство;                                     Протеводействие: Стабилизация пространства
     public float RadiationFactor;     //Угроза: Фактор излучения;                                                       Протеводействие: Экранирование
     public float WillFactor;          //Угроза: Фактор воли;                                                            Протеводействие: Наблюдение и контроль
+    public float ToxicFactor;         //Угроза: Химическое / биологическое заражение;                                   Противодействие: Гермитизация
 }
 
 public class AnomalObject : MonoBehaviour {
@@ -22,4 +23,6 @@ public class AnomalObject : MonoBehaviour {
     public float Progress;
     public string Description;
     public ImpactFactors Properties;
+
+    public ObjectStorage storage;
 }

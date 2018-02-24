@@ -11,19 +11,29 @@ public class AnomalObjectUI : MonoBehaviour {
     public Image ObjectImage;
     public Text Progress;
     public Text Description;
+    public Button MoveButton;
     //public Text Properties;
     public bool ToRefreshData;
 
-    RectTransform rectTransform;
-    Vector2 ShowLocation;
-    Vector2 HideLocation;
+    PlayerController controller;
+
+    public RectTransform rectTransform;
+
+    public Transform parentCanvas;
+    public Transform hiddenUI;
+    /*Vector2 ShowLocation;
+    Vector2 HideLocation;*/
 
     // Use this for initialization
-    void Start ()
+    void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
-        HideLocation = rectTransform.anchoredPosition;
-        ShowLocation = HideLocation + Vector2.left * 300;
+        /*HideLocation = rectTransform.anchoredPosition;
+        ShowLocation = HideLocation + Vector2.left * 300;*/
+        GameObject finded = GameObject.Find("PlayerController");
+        if (finded != null)
+            controller = finded.GetComponent<PlayerController>();
+        Hide();
         /*GameObject finded = GameObject.Find("AnomalObject_CodeName");
         if (finded != null)
             ID = finded.GetComponent<Text>();
@@ -50,16 +60,6 @@ public class AnomalObjectUI : MonoBehaviour {
         }
     }
 
-    void Show()
-    {
-        rectTransform.anchoredPosition = ShowLocation;
-    }
-
-    public void Hide()
-    {
-        rectTransform.anchoredPosition = HideLocation;
-    }
-
     public void RefreshData()
     {
         if (anomalObject == null) return;
@@ -73,12 +73,28 @@ public class AnomalObjectUI : MonoBehaviour {
             Progress.text = (anomalObject.Progress * 100).ToString("0") + '%';
         if (Description != null)
             Description.text = anomalObject.Description;
+        if (MoveButton != null)
+        {
+            MoveButton.onClick.RemoveAllListeners();
+            MoveButton.onClick.AddListener(SelectInController);
+        }
+    }
+
+    public void SelectInController()
+    {
+        controller.SetAnomalObjectMode(anomalObject);
     }
 
     public void SetAnomalObject(AnomalObject anomalObject)
     {
         this.anomalObject = anomalObject;
         RefreshData();
-        Show();
+        transform.SetParent(parentCanvas, false);
+    }
+
+    public void Hide()
+    {
+        transform.SetParent(hiddenUI, false);
+        //rectTransform.anchoredPosition = HideLocation;
     }
 }

@@ -10,21 +10,24 @@ public class ObjectStorageUI : MonoBehaviour {
     //public Text Properties;
     public bool ToRefreshData;
 
-    RectTransform rectTransform;
+    /*RectTransform rectTransform;
     Vector2 ShowLocation;
-    Vector2 HideLocation;
+    Vector2 HideLocation;*/
+    public Transform parentCanvas;
+    public Transform hiddenUI;
 
     AnomalObjectUI StoringObjectUI;
 
     // Use this for initialization
     void Start ()
     {
-        rectTransform = GetComponent<RectTransform>();
+        /*rectTransform = GetComponent<RectTransform>();
         HideLocation = rectTransform.anchoredPosition;
-        ShowLocation = HideLocation - Vector2.left * 300;
+        ShowLocation = HideLocation - Vector2.left * 300;*/
         GameObject finded = GameObject.Find("AnomalObjectInfo");
         if (finded != null)
             StoringObjectUI = finded.GetComponent<AnomalObjectUI>();
+        Hide();
         /*finded = GameObject.Find("StorageInfo_Durability");
         if (finded != null)
             Durability = finded.GetComponent<Text>();*/
@@ -39,23 +42,6 @@ public class ObjectStorageUI : MonoBehaviour {
         }
     }
 
-    void Show()
-    {
-        rectTransform.anchoredPosition = ShowLocation;
-    }
-
-    public void Hide()
-    {
-        rectTransform.anchoredPosition = HideLocation;
-    }
-
-    public void SetObjectStorage(ObjectStorage objectStorage)
-    {
-        this.objectStorage = objectStorage;
-        RefreshData();
-        Show();
-    }
-
     public void RefreshData()
     {
         if (objectStorage == null) return;
@@ -65,5 +51,17 @@ public class ObjectStorageUI : MonoBehaviour {
             StoringObjectUI.SetAnomalObject(objectStorage.anomalObject);
         else
             StoringObjectUI.Hide();
+    }
+
+    public void SetObjectStorage(ObjectStorage objectStorage)
+    {
+        this.objectStorage = objectStorage;
+        RefreshData();
+        transform.SetParent(parentCanvas, false);
+    }
+
+    public void Hide()
+    {
+        transform.SetParent(hiddenUI, false);
     }
 }
