@@ -4,23 +4,18 @@ using UnityEngine;
 
 public class ObjectStorage : Building {
 
-    AnomalObject anomalObject;
+    public AnomalObject anomalObject;
     [SerializeField]
     ImpactFactors Protection;
-    [SerializeField]
-    float MaxDurability;
-    public float Durability { get; private set; }
 
-    public override void Select()
+
+    public float GetPurcentDurability()
     {
-
+        return Durability / MaxDurability * 100;
     }
-    // Use this for initialization
-    void Start () {
-	}
 	
 	// Update is called once per frame
-	void Update () {
+	public override void Update () {
 		
 	}
 }

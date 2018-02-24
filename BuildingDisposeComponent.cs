@@ -88,9 +88,9 @@ public class BuildingDisposeComponent : MonoBehaviour
         }
         else if (CurrentTask == TaskType.Dig)
         {
-            /*SoilBlock soil = grid.GetBuildingAt(CellLocation) as SoilBlock;
+            SoilBlock soil = grid.GetBuildingAt(CellLocation) as SoilBlock;
             if (soil == null) return;
-            soil.re*/
+            soil.HighLightType = 1;
         }
     }
 

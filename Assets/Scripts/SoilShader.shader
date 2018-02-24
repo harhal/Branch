@@ -1,5 +1,7 @@
 ﻿Shader "Custom/SoilShader" {
 	Properties {
+		_Color("Color", Color) = (1,1,1,1)
+
 		_TopMainTex("Top Albedo", 2D) = "white" {}
 		_TopSmoothness("Top Smoothness", 2D) = "white" {}
 		_TopNMap ("Top Normal Map", 2D) = "bump" {}
@@ -40,6 +42,8 @@
 		sampler2D _BottomMainTex;
 		sampler2D _BottomSmoothness;
 		sampler2D _BottomNMap;
+
+		fixed4 _Color;
 
 		struct Input {
 			float2 uv_MainTex;
@@ -106,8 +110,12 @@
 				normal += bottom * tex2D(_BottomNMap, TexUV);
 			}
 			o.Albedo = albedo;
+			o.Emission = _Color.rgb;
 			o.Smoothness = smoothness;
-			o.Normal = UnpackNormal(normal) * -1;
+			float3 unpackedNormal = UnpackNormal(normal);
+			unpackedNormal.x = -unpackedNormal.x;
+			unpackedNormal.y = -unpackedNormal.y;
+			o.Normal = unpackedNormal;
 			o.Metallic = 0;
 		}
 		ENDCG

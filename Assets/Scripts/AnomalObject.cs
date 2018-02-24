@@ -16,18 +16,10 @@ public struct ImpactFactors
 
 public class AnomalObject : MonoBehaviour {
 
-    string Name;
-    Texture2D Image;
-    string Discription;
-    ImpactFactors Properties;
-
-    // Use this for initialization
-    void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    public int ID;
+    public string Name;
+    public Sprite Image;
+    public float Progress;
+    public string Description;
+    public ImpactFactors Properties;
 }

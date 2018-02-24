@@ -32,7 +32,9 @@ public class BuildProcessComponent : MonoBehaviour {
             progressbar.Progress = CurrentTime / BuildTime;
         else
         {
-            GetComponent<Building>().enabled = true;
+            var building = GetComponent<Building>();
+            building.FullRepair();
+            building.enabled = true;
             enabled = false;
         }
     }
