@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class AnomalObjectUI : MonoBehaviour {
 
+    public static AnomalObjectUI FirstUI;
+
     public AnomalObject anomalObject;
     public Text ID;
     public Text Name;
@@ -12,50 +14,24 @@ public class AnomalObjectUI : MonoBehaviour {
     public Text Progress;
     public Text Description;
     public Button MoveButton;
-    //public Text Properties;
-    public bool ToRefreshData;
-
-    PlayerController controller;
 
     public RectTransform rectTransform;
 
     public Transform parentCanvas;
     public Transform hiddenUI;
-    /*Vector2 ShowLocation;
-    Vector2 HideLocation;*/
 
-    // Use this for initialization
     void Awake()
     {
+        if (FirstUI == null)
+            FirstUI = this;
         rectTransform = GetComponent<RectTransform>();
-        /*HideLocation = rectTransform.anchoredPosition;
-        ShowLocation = HideLocation + Vector2.left * 300;*/
-        GameObject finded = GameObject.Find("PlayerController");
-        if (finded != null)
-            controller = finded.GetComponent<PlayerController>();
         Hide();
-        /*GameObject finded = GameObject.Find("AnomalObject_CodeName");
-        if (finded != null)
-            ID = finded.GetComponent<Text>();
-        finded = GameObject.Find("AnomalObject_TextName");
-        if (finded != null)
-            Name = finded.GetComponent<Text>();
-        finded = GameObject.Find("AnomalObject_Image");
-        if (finded != null)
-            ObjectImage = finded.GetComponent<Image>();
-        finded = GameObject.Find("AnomalObject_Progress");
-        if (finded != null)
-            Progress = finded.GetComponent<Text>();
-        finded = GameObject.Find("AnomalObject_Description");
-        if (finded != null)
-            Description = finded.GetComponent<Text>();*/
     }
 	
 	// Update is called once per frame
 	void Update () {
-        if (ToRefreshData)
+        if (anomalObject != null)
         {
-            ToRefreshData = false;
             RefreshData();
         }
     }
@@ -82,7 +58,7 @@ public class AnomalObjectUI : MonoBehaviour {
 
     public void SelectInController()
     {
-        controller.SetAnomalObjectMode(anomalObject);
+        PlayerController.MainController.SetAnomalObjectMode(anomalObject);
     }
 
     public void SetAnomalObject(AnomalObject anomalObject)
@@ -94,7 +70,7 @@ public class AnomalObjectUI : MonoBehaviour {
 
     public void Hide()
     {
+        this.anomalObject = null;
         transform.SetParent(hiddenUI, false);
-        //rectTransform.anchoredPosition = HideLocation;
     }
 }

@@ -19,8 +19,6 @@ public class EntrepotUI : MonoBehaviour {
     Vector2 ItemLocationOffset;
     public bool ToRefreshData;
 
-    RectTransform listTransform;
-
     public void RefreshData()
     {
         bool filterOn = false;
@@ -43,7 +41,7 @@ public class EntrepotUI : MonoBehaviour {
                     ui.SetAnomalObject(anomalObject);
                     anomalObjects.Add(anomalObject, ui);
                 }
-                ui.rectTransform.anchoredPosition = BaseItemLocation + ItemLocationOffset * offset;
+                //ui.rectTransform.anchoredPosition = BaseItemLocation + ItemLocationOffset * offset;
                 offset++;
             }
             else
@@ -56,16 +54,16 @@ public class EntrepotUI : MonoBehaviour {
             }
 
         }
-        if (listTransform != null)
-            listTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (BaseItemLocation + ItemLocationOffset * offset).x);
+        //if (listTransform != null)
+            //listTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, (BaseItemLocation + ItemLocationOffset * offset).x);
     }
 
 	// Use this for initialization
 	void Start ()
     {
         anomalObjects = new Dictionary<AnomalObject, AnomalObjectUI>();
-        if (objectList != null)
-            listTransform = objectList.GetComponent<RectTransform>();
+        /*if (objectList != null)
+            listTransform = objectList.GetComponent<RectTransform>();*/
         GameObject finded = GameObject.Find("ResourceStorage");
         if (finded != null)
             Entrepoint = finded.GetComponent<ResourceStorage>();

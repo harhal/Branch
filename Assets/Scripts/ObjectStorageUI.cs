@@ -5,10 +5,14 @@ using UnityEngine.UI;
 
 public class ObjectStorageUI : MonoBehaviour {
 
+    public static ObjectStorageUI UI;
+
     public ObjectStorage objectStorage;
     public Text Durability;
     //public Text Properties;
     public bool ToRefreshData;
+    public PlusMinusUI Scientists;
+    ResourceStorage resources;
 
     /*RectTransform rectTransform;
     Vector2 ShowLocation;
@@ -17,6 +21,11 @@ public class ObjectStorageUI : MonoBehaviour {
     public Transform hiddenUI;
 
     AnomalObjectUI StoringObjectUI;
+
+    public void Awake()
+    {
+        UI = this;
+    }
 
     // Use this for initialization
     void Start ()
@@ -27,10 +36,22 @@ public class ObjectStorageUI : MonoBehaviour {
         GameObject finded = GameObject.Find("AnomalObjectInfo");
         if (finded != null)
             StoringObjectUI = finded.GetComponent<AnomalObjectUI>();
-        Hide();
-        /*finded = GameObject.Find("StorageInfo_Durability");
+        finded = GameObject.Find("ResourceStorage");
         if (finded != null)
-            Durability = finded.GetComponent<Text>();*/
+        {
+            resources = finded.GetComponent<ResourceStorage>();
+            if (Scientists != null)
+            {
+                Scientists.OnValueChanged += delegate (int delta)
+                {
+                    if (delta >= 0)
+                        objectStorage.HireScientist();
+                    else
+                        objectStorage.FireScientist();
+                };
+            }
+        }
+        Hide();
     }
 	
 	// Update is called once per frame
@@ -40,6 +61,11 @@ public class ObjectStorageUI : MonoBehaviour {
             ToRefreshData = false;
             RefreshData();
         }
+        if (Scientists != null && resources != null && objectStorage != null)
+        {
+            Scientists.MaxValue = objectStorage.HiredScientists + resources.Scientists.Free;
+            Scientists.RefreshText(0);
+        }
     }
 
     public void RefreshData()
@@ -47,6 +73,11 @@ public class ObjectStorageUI : MonoBehaviour {
         if (objectStorage == null) return;
         if (Durability != null)
             Durability.text = objectStorage.GetPurcentDurability().ToString() + '%';
+        if (Scientists != null)
+        {
+            if (objectStorage.anomalObject != null)
+                Scientists.Value = objectStorage.HiredScientists;
+        }
         if (objectStorage.anomalObject != null)
             StoringObjectUI.SetAnomalObject(objectStorage.anomalObject);
         else

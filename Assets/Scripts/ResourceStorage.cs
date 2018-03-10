@@ -5,63 +5,74 @@ using UnityEngine.UI;
 
 public class ResourceStorage : MonoBehaviour {
 
+    public static ResourceStorage resourceStorage;
+
     [System.Serializable]
     public struct HumanResource
     {
+        List<Human> _list;
+        public List<Human> List { get { if (_list == null) _list = new List<Human>(); return _list; } private set { _list = value; }  }
         [SerializeField]
         uint _alive;
         public uint Alive { get { return _alive; } private set { _alive = value; } }
         [SerializeField]
         uint _free;
         public uint Free { get { return _free; } private set { _free = value; } }
-        public uint Max;
 
-        public bool Send(uint count)
+        public void Send(Human human)
         {
-            if (Free >= count)
+            if (Free >= 1 && List.Contains(human))
             {
-                Free -= count;
+                Free -= 1;
+                human.isFree = false;
+            }
+        }
+
+        public Human Send()
+        {
+            if (Free >= 1)
+            {
+                Free -= 1;
+                int i = 0;
+                while (!List[i].isFree) i++;
+                List[i].isFree = false;
+                return List[i];
+            }
+            return null;
+        }
+
+        public void Hire(Human human)
+        {
+            Alive += 1;
+            Free += 1;
+            List.Add(human);
+            human.isFree = true;
+        }
+
+        public bool Dead(Human human) //Use only for human on mission
+        {
+            if (Alive >= 1 && List.Contains(human))
+            {
+                Alive -= 1;
+                List.Remove(human);
                 return true;
             }
             else
                 return false;
         }
 
-        public bool Hire(uint count)
+        public void Return(Human human)
         {
-            if (Alive + count <= Max)
+            if (List.Contains(human))
             {
-                Alive += count;
-                Free += count;
-                return true;
+                Free += 1;
+                human.isFree = true;
             }
-            else
-            {
-                Free += Max - Alive;
-                Alive = Max;
-                return false;
-            }
-        }
-
-        public bool Dead(uint count) //Use only for human on mission
-        {
-            if (Alive >= count)
-            {
-                Alive -= count;
-                return true;
-            }
-            else
-                return false;
-        }
-
-        public void Return(uint count)
-        {
-            Free += count;
         }
 
         public override string ToString()
         {
-            return Free.ToString() + " / " + Alive.ToString() + " (" + Max.ToString() + ")";
+            return Free.ToString() + " / " + Alive.ToString();
         }
     }
 
@@ -98,23 +109,29 @@ public class ResourceStorage : MonoBehaviour {
         AddAnomalObject(newObj);
     }
 
+    public HumanResource Agents;
     public HumanResource Scientists;
     public HumanResource Operatives;
     public HumanResource D_Personnel;
-    private List<ObjectStorage> storages;
     public List<AnomalObject> anomalObjects;
+    public float Reputation;
 
-    Text MoneyOutput;
-    Text ScientistsOutput;
-    Text OperativesOutput;
-    Text D_PersonnelOutput;
-    EntrepotUI entrepotUI;
+    public Text MoneyOutput;
+    public Text AgentsOutput;
+    public Text ScientistsOutput;
+    public Text OperativesOutput;
+    public Text D_PersonnelOutput;
+    public EntrepotUI entrepotUI;
+
+    public void Awake()
+    {
+        resourceStorage = this;
+    }
 
     // Use this for initialization
     void Start () {
         anomalObjects = new List<AnomalObject>();
-        storages = new List<ObjectStorage>();
-        GameObject finded = GameObject.Find("MoneyOutput");
+        /*GameObject finded = GameObject.Find("MoneyOutput");
         if (finded != null)
             MoneyOutput = finded.GetComponent<Text>();
         finded = GameObject.Find("ScientistsOutput");
@@ -128,13 +145,15 @@ public class ResourceStorage : MonoBehaviour {
             D_PersonnelOutput = finded.GetComponent<Text>();
         finded = GameObject.Find("EntrepotUI");
         if (finded != null)
-            entrepotUI = finded.GetComponent<EntrepotUI>();
+            entrepotUI = finded.GetComponent<EntrepotUI>();*/
     }
 	
 	// Update is called once per frame
 	void Update () {
         if (MoneyOutput != null)
             MoneyOutput.text = Money.ToString();
+        if (AgentsOutput != null)
+            AgentsOutput.text = Agents.ToString();
         if (ScientistsOutput != null)
             ScientistsOutput.text = Scientists.ToString();
         if (OperativesOutput != null)

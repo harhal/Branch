@@ -9,6 +9,9 @@ public class GameInitializer : MonoBehaviour {
     [SerializeField]
     SoilBlock soil;
 
+    public Human[] Scientists;
+    public Human[] Agents;
+
     private void Awake()
     {
         GameObject finded = GameObject.Find("ResourceStorage");
@@ -27,6 +30,10 @@ public class GameInitializer : MonoBehaviour {
     void Initialize()
     {
         resources.AddMoney(100);
+        foreach (Human agent in Agents)
+            resources.Agents.Hire(agent);
+        foreach (Human scientist in Scientists)
+            resources.Scientists.Hire(scientist);
         Vector2Int gridSize = grid.GetSize();
         Vector2Int loc = new Vector2Int(0, 0);
         for (loc.y = 0; loc.y < gridSize.y; loc.y++)

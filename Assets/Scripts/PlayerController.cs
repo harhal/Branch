@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController MainController;
+
     public enum ControlMode { BaseControl, Build, Dig, StorageControl, AnomalObjectControl, EntrepointControl, MissionControl }
 
     GridComponent grid;
@@ -17,15 +19,9 @@ public class PlayerController : MonoBehaviour
     public AnomalObjectUI anomalObjectUI;
     public EntrepotUI entrepotUI;
 
-    public void SetBuildMode(Building building)
-    {
-        CurrentSelection = building.gameObject;
-        CurrentMode = ControlMode.Build;
-    }
-
     void ResetMode()
     {
-        print("ControlReset");
+        //print("ControlReset");
         switch (CurrentMode)
         {
             case (ControlMode.Build):
@@ -47,6 +43,12 @@ public class PlayerController : MonoBehaviour
                 }
         }
         CurrentSelection = null;
+    }
+
+    public void SetBuildMode(Building building)
+    {
+        CurrentSelection = building.gameObject;
+        CurrentMode = ControlMode.Build;
     }
 
     public void SetDefaultMode()
@@ -82,7 +84,8 @@ public class PlayerController : MonoBehaviour
                         storage.anomalObject = anomalObject;
                         anomalObject.storage = storage;
                         entrepotUI.RefreshData();
-                        objectStorageUI.SetObjectStorage(storage);
+                        SetStorageMode(storage);
+                        //objectStorageUI.SetObjectStorage(storage);
                         return;
                     }
             }
@@ -91,6 +94,12 @@ public class PlayerController : MonoBehaviour
         anomalObjectUI.SetAnomalObject(anomalObject);
         CurrentSelection = anomalObject.gameObject;
         CurrentMode = ControlMode.AnomalObjectControl;
+    }
+
+    private void Awake()
+    {
+        if (MainController == null)
+            MainController = this;
     }
 
     private void Start()
