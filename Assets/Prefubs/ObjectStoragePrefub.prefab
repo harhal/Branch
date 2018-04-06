@@ -22,8 +22,7 @@ GameObject:
   - component: {fileID: 33610505992454942}
   - component: {fileID: 65061080285409718}
   - component: {fileID: 23021888887642116}
-  - component: {fileID: 114288359291056678}
-  - component: {fileID: 114626301046158080}
+  - component: {fileID: 114728709614081824}
   m_Layer: 0
   m_Name: ObjectStoragePrefub
   m_TagString: Untagged
@@ -97,41 +96,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 4, y: 2.5, z: 4}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &114288359291056678
+--- !u!114 &114728709614081824
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1463706700904566}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d816a221829107e4a8c0ac8858c02b62, type: 3}
+  m_Script: {fileID: 11500000, guid: 167553dea3ae8fc40bab8efbe8e88449, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Size: {x: 1, y: 1}
   BuildingRenderer: {fileID: 23021888887642116}
-  cost: 10
-  Protection:
-    TermoFactor: 0
-    RealityFactor: 0
-    MentalFactor: 0
-    PhisicalFactor: 0
-    SpaceFactor: 0
-    RadiationFactor: 0
-    WillFactor: 0
-  MaxDurability: 100
---- !u!114 &114626301046158080
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1463706700904566}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bcdf462b81bb40c4983d741a53a15de9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  progressbarPrototype: {fileID: 114442050822175878, guid: ac7258c9420351641802dddf805a7e49,
-    type: 2}
-  BuildTime: 3
-  CurrentTime: 0
+  Building:
+    Size: {x: 1, y: 1}
+    cost: 0

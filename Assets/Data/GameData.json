@@ -1,0 +1,342 @@
+{
+    "LevelsData": {
+        "HumanExperience": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "TechProgress": [
+            100.0,
+            150.0,
+            200.0,
+            250.0,
+            300.0,
+            350.0,
+            400.0,
+            450.0,
+            500.0,
+            550.0
+        ],
+        "AgentPoints": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "OperativePoints": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ScientistPoints": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+        "AgentDeathChance": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "OperativeDeathChance": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "ScientistDeathChance": [
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0,
+            1.0
+        ],
+        "Discoveries": [
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
+            { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] }
+        ]
+    },
+    "anomalObjects": [
+        {
+            "ID": 526,
+            "Name": "Flame",
+            "image": "Pictures/AnomalObjects/Default",
+            "FullResearchPoints": 100.0,
+            "CurrentResearchPoints": 0.0,
+            "Description": "Test",
+            "Reports": [
+                {
+                    "ProgressPoints": 0.0,
+                    "Report": "Test"
+                }
+            ],
+            "Properties": {
+                "TermoFactor": 5.0,
+                "RealityFactor": 0.0,
+                "MentalFactor": 0.0,
+                "PhisicalFactor": 0.0,
+                "SpaceFactor": 0.0,
+                "RadiationFactor": 0.0,
+                "WillFactor": 0.0,
+                "BiohazardFactor": 0.0
+            },
+            "storageIsValid": false,
+            "storage": 0
+        },
+        {
+            "ID": 214,
+            "Name": "Monkey",
+            "image": "Pictures/AnomalObjects/Default",
+            "FullResearchPoints": 100.0,
+            "CurrentResearchPoints": 0.0,
+            "Description": "Test",
+            "Reports": [
+                {
+                    "ProgressPoints": 0.0,
+                    "Report": "Test"
+                }
+            ],
+            "Properties": {
+                "TermoFactor": 0.0,
+                "RealityFactor": 0.0,
+                "MentalFactor": 0.0,
+                "PhisicalFactor": 0.0,
+                "SpaceFactor": 0.0,
+                "RadiationFactor": 0.0,
+                "WillFactor": 5.0,
+                "BiohazardFactor": 0.0
+            },
+            "storageIsValid": false,
+            "storage": 0
+        }
+    ],
+    "FieldOperations": [
+        {
+			"Name" : "TestOperation1",
+            "InvestigationTime": 20.0,
+            "PreOperationTime": 20.0,
+            "OperationTime": 10.0,
+            "InvestigetionBreakPoint": 10.0,
+            "FieldAgentIsValid": false,
+            "Operatives": [],
+            "MinInvestigationPoints": 15.0,
+            "GoodInvestigationPoints": 20.0,
+            "MinOperationPoints": 5.0,
+            "GoodOperationPoints": 8.0,
+            "StartReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "This is test operation. {0}, send agent to ivestigate this.",
+				"Summary": "",
+                "isVariable": true
+            },
+            "InvistigationReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "{2} need help. You, {0}, have to chose direction of investigation",
+				"Summary": "",
+                "isVariable": true,
+                "DecisionChoises": [
+                    {
+                        "Text": "Good (Spend 10 money)",
+                        "Money": 10,
+                        "Reputation": 0.0,
+                        "ProgressPoints": 100.0
+                    },
+                    {
+                        "Text": "Bad (Get 100 money)",
+                        "Money": -100,
+                        "Reputation": 0.0,
+                        "ProgressPoints": -100.0
+                    }
+                ]
+            },
+            "PreOperationReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "On that part you have to send operatives to help agent capture anomaly",
+				"Summary": "",
+                "isVariable": true
+            },
+            "BadEndingReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "It's a bad ending. You got nothing. Agent may die",
+				"Summary": "",
+                "isVariable": true
+            },
+            "NormalEndingReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "It's a normal ending. Your agent captured anomal object",
+				"Summary": "",
+                "isVariable": true
+            },
+            "GoodEndingReport": {
+                "photo": "Pictures/IncedentPhotos/Default",
+                "Description": "It's a perfect ending. You got anomal object and may recruit some people",
+				"Summary": "",
+                "isVariable": true
+            },
+            "ReputationPenalty": 10.0,
+            "BonusRewardIsValid": true,
+            "BonusReward": {
+                "ID": 0,
+                "Name": "",
+                "Sex": 2,
+                "photo": "Pictures/Face/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "ToGenerate": true,
+                "isFree": true
+            },
+            "RewardIsValid": true,
+            "Reward": 526,
+            "AgentDeathChance": 0.0
+        }
+    ],
+    "HumanGenerator": {
+        "FirstNames": {
+            "Items": [
+                {
+                    "Sex": 0,
+                    "Value": "Jack"
+                },
+                {
+                    "Sex": 0,
+                    "Value": "Samuel"
+                },
+                {
+                    "Sex": 0,
+                    "Value": "Nikolas"
+                },
+                {
+                    "Sex": 0,
+                    "Value": "Chris"
+                },
+                {
+                    "Sex": 1,
+                    "Value": "Jessica"
+                },
+                {
+                    "Sex": 1,
+                    "Value": "Elisabeth"
+                },
+                {
+                    "Sex": 1,
+                    "Value": "Gloria"
+                }
+            ]
+        },
+        "LastNames": {
+            "Items": [
+                {
+                    "Sex": 2,
+                    "Value": "Smith"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Jones"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Freeman"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Oldman"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Romanov"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Shepard"
+                },
+                {
+                    "Sex": 2,
+                    "Value": "Carol"
+                }
+            ]
+        },
+        "Faces": {
+            "Items": [
+                {
+                    "Sex": 2,
+                    "Value": "Pictures/Faces/Default"
+                }
+            ]
+        },
+        "PreGeneratedMen": [
+            {
+                "ID": 0,
+                "Name": "Liroy Jenkins",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "ToGenerate": false
+            }
+		],
+        "PreGeneratedWomen": [
+            {
+                "ID": 0,
+                "Name": "Lara Croft",
+                "Sex": 1,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "ToGenerate": false
+            }
+        ]
+    }
+}
