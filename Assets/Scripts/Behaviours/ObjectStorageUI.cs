@@ -8,13 +8,18 @@ public class ObjectStorageUI : UICollabsiblePanel {
     public static ObjectStorageUI UI;
 
     public ObjectStorage objectStorage;
-    public bool ToRefreshData;
     public Text Level;
+    public GameObject NoStoringObject;
+    public GameObject UsualInfoContainer;
+    public GameObject ContaintementBreachInfoContainer;
     public Text ScientistsCount;
     public Text GuardCount;
+    public Text LiquidatorsCount;
     public Button ScientistsButton;
     public Button GuardButton;
     public ProgressBar[] Factors;
+    public Button UpgradeButton;
+    public ProgressBar ChaosLevel;
 
     public void Awake()
     {
@@ -27,11 +32,11 @@ public class ObjectStorageUI : UICollabsiblePanel {
     }
 	
 	void Update () {
-        if (ToRefreshData)
-        {
-            ToRefreshData = false;
-            RefreshData();
-        }
+        if (objectStorage == null) return;
+        if (objectStorage.anomalObject == null) return;
+        if (!objectStorage.anomalObject.IsStable())
+            if (ChaosLevel != null)
+                ChaosLevel.Progress = objectStorage.GetChaosLevel();
     }
 
     public void RefreshData()
@@ -47,24 +52,44 @@ public class ObjectStorageUI : UICollabsiblePanel {
         }
         if (GuardCount != null)
         {
-            GuardCount.text = objectStorage.HiredOperatives.ToString();
+            GuardCount.text = objectStorage.HiredGuard.ToString();
         }
-        if (Factors.Length >= 8)
+        if (LiquidatorsCount != null)
         {
-            Factors[0].Progress = objectStorage.Protection.TermoFactor / ImpactFactors.MaxValue;
-            Factors[1].Progress = objectStorage.Protection.RealityFactor / ImpactFactors.MaxValue;
-            Factors[2].Progress = objectStorage.Protection.MentalFactor / ImpactFactors.MaxValue;
-            Factors[3].Progress = objectStorage.Protection.PhisicalFactor / ImpactFactors.MaxValue;
-            Factors[4].Progress = objectStorage.Protection.SpaceFactor / ImpactFactors.MaxValue;
-            Factors[5].Progress = objectStorage.Protection.RadiationFactor / ImpactFactors.MaxValue;
-            Factors[6].Progress = objectStorage.Protection.WillFactor / ImpactFactors.MaxValue;
-            Factors[7].Progress = objectStorage.Protection.BiohazardFactor / ImpactFactors.MaxValue;
+            LiquidatorsCount.text = objectStorage.HiredLiquidators.ToString();
         }
-        if (!AnomalObjectUI.FirstUI.gameObject.activeInHierarchy)
-            if (objectStorage.anomalObject != null)
-                AnomalObjectUI.FirstUI.SetAnomalObject(objectStorage.anomalObject);
+        if (ChaosLevel != null)
+            ChaosLevel.Progress = objectStorage.GetChaosLevel();
+        if (Factors.Length >= ImpactFactors.FieldsCount)
+        {
+            for (int i = 0; i < ImpactFactors.FieldsCount; i++)
+            Factors[i].Progress = objectStorage.Protection[i] / ImpactFactors.MaxValue;
+        }
+        if (objectStorage.anomalObject != null)
+        {
+            NoStoringObject.SetActive(false);
+            AnomalObjectUI.FirstUI.SetAnomalObject(objectStorage.anomalObject);
+            if (objectStorage.anomalObject.IsStable())
+            {
+                UsualInfoContainer.SetActive(true);
+                ContaintementBreachInfoContainer.SetActive(false);
+                UpgradeButton.interactable = true;
+            }
             else
-                AnomalObjectUI.FirstUI.Hide();
+            {
+                UsualInfoContainer.SetActive(false);
+                ContaintementBreachInfoContainer.SetActive(true);
+                UpgradeButton.interactable = false;
+            }
+        }
+        else
+        {
+            NoStoringObject.SetActive(true);
+            AnomalObjectUI.FirstUI.Hide();
+            UsualInfoContainer.SetActive(false);
+            ContaintementBreachInfoContainer.SetActive(false);
+            UpgradeButton.interactable = true;
+        }
     }
 
     public void SetObjectStorage(ObjectStorage objectStorage)
@@ -102,12 +127,12 @@ public class ObjectStorageUI : UICollabsiblePanel {
 
     public void GuardControl()
     {
-        PlayerController.MainController.ShowPeopleControl("Scientists", SessionData.Data.ResourceStorage.FreeOperatives, objectStorage.Scientists, 10, ScientistsConfirm);
+        PlayerController.MainController.ShowPeopleControl("Guard", SessionData.Data.ResourceStorage.FreeOperatives, objectStorage.Guard, 5, GuardConfirm);
     }
 
     public void GuardConfirm(List<Human> GuardList)
     {
-        List<int> oldList = objectStorage.Scientists;
+        List<int> oldList = objectStorage.Guard;
         objectStorage.Guard = new List<int>();
         foreach (var item in GuardList)
         {
@@ -115,14 +140,41 @@ public class ObjectStorageUI : UICollabsiblePanel {
             {
                 item.Hire(objectStorage);
             }
-            objectStorage.Scientists.Add(item.ID);
+            objectStorage.Guard.Add(item.ID);
             oldList.Remove(item.ID);
         }
         foreach (var item in oldList)
         {
             SessionData.Data.ResourceStorage.People[item].Fire();
         }
-        GuardCount.text = GuardList.Count.ToString();
+        GuardCount.text = objectStorage.HiredGuard.ToString();
+        objectStorage.RefreshWillProtection();
+        Factors[6].Progress = objectStorage.Protection.WillFactor / ImpactFactors.MaxValue;
+    }
+
+    public void LiquidatorControl()
+    {
+        PlayerController.MainController.ShowPeopleControl("Liquidators", SessionData.Data.ResourceStorage.FreeOperatives, objectStorage.Liquidators, 10, LiquidatorConfirm);
+    }
+
+    public void LiquidatorConfirm(List<Human> LiquidatorsList)
+    {
+        List<int> oldList = objectStorage.Liquidators;
+        objectStorage.Liquidators = new List<int>();
+        foreach (var item in LiquidatorsList)
+        {
+            if (item.Activity != Human.ActivityType.Working)
+            {
+                item.Hire(objectStorage);
+            }
+            objectStorage.Liquidators.Add(item.ID);
+            oldList.Remove(item.ID);
+        }
+        foreach (var item in oldList)
+        {
+            SessionData.Data.ResourceStorage.People[item].Fire();
+        }
+        LiquidatorsCount.text = LiquidatorsList.Count.ToString();
     }
 
     public void Upgrade()

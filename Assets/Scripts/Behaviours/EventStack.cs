@@ -17,6 +17,7 @@ public class EventStack : MonoBehaviour {
     public ScrollRect Scroll;
 
     public Sprite NewAnomalObjectIcon;
+    public Sprite AnomalObjectMissedIcon;
     public Sprite AnomalObjectMovedIcon;
     public Sprite ResearchesUpdatedIcon;
     public Sprite ContaintmentBreachIcon;
@@ -40,6 +41,7 @@ public class EventStack : MonoBehaviour {
     public Sprite DPersonnelDiedIcon;
 
     void CreateNewAnomalObjectIcon              (string Description, object Invoker) { AddItem(NewAnomalObjectIcon, Invoker);}
+    void CreateAnomalObjectMissedIcon            (string Description, object Invoker) { AddItem(AnomalObjectMovedIcon, Invoker);}
     void CreateAnomalObjectMovedIcon            (string Description, object Invoker) { AddItem(AnomalObjectMovedIcon, Invoker);}
     void CreateResearchesUpdatedIcon            (string Description, object Invoker) { AddItem(ResearchesUpdatedIcon, Invoker);}
     void CreateContaintmentBreachIcon           (string Description, object Invoker) { AddItem(ContaintmentBreachIcon, Invoker);}
@@ -106,7 +108,8 @@ public class EventStack : MonoBehaviour {
 
     private void Start()
     {
-        Kanban.Board.OnNewAnomalObject += CreateNewAnomalObjectIcon; 
+        Kanban.Board.OnNewAnomalObject += CreateNewAnomalObjectIcon;
+        Kanban.Board.OnAnomalObjectMissed += CreateAnomalObjectMissedIcon;
         Kanban.Board.OnAnomalObjectMoved += CreateAnomalObjectMovedIcon;
         Kanban.Board.OnResearchesUpdated += CreateResearchesUpdatedIcon;
         Kanban.Board.OnContaintmentBreach += CreateContaintmentBreachIcon;

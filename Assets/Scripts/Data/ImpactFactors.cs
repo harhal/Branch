@@ -82,11 +82,30 @@ public struct ImpactFactors
         }
     }
 
+    public static explicit operator float(ImpactFactors A)
+    {
+        float result = 0;
+        for (int i = 0; i < FieldsCount; i++)
+            result += A[i];
+        return result;
+    }
+
     public static ImpactFactors operator+ (ImpactFactors A, ImpactFactors B)
     {
         ImpactFactors result = new ImpactFactors(0);
         for (int i = 0; i < FieldsCount; i++)
             result[i] = A[i] + B[i];
+        return result;
+    }
+
+    public static ImpactFactors operator -(ImpactFactors A, ImpactFactors B)
+    {
+        ImpactFactors result = new ImpactFactors(0);
+        for (int i = 0; i < FieldsCount; i++)
+        {
+            result[i] = A[i] - B[i];
+            if (result[i] < 0) result[i] = 0;
+        }
         return result;
     }
 

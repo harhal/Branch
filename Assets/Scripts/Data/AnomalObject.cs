@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,6 +17,7 @@ public class AnomalObject
     public string Name;
     [SerializeField]
     string image;
+
     public float FullResearchPoints;
     public float CurrentResearchPoints;
     [TextArea]
@@ -29,8 +29,10 @@ public class AnomalObject
     bool storageIsValid = false;
     [SerializeField]
     int storage;
+    [SerializeField]
+    float Stability;
 
-    [NonSerialized]
+    [System.NonSerialized]
     Sprite _image;
     public Sprite Image
     {
@@ -42,7 +44,7 @@ public class AnomalObject
         }
     }
     public float Progress { get { return Mathf.Clamp(CurrentResearchPoints / FullResearchPoints, 0, 1); } }
-    [NonSerialized]
+    [System.NonSerialized]
     ObjectStorage _storage;
     public ObjectStorage Storage
     {
@@ -101,5 +103,45 @@ public class AnomalObject
             }
         }
         SessionData.Data.Researches.Research(Properties * ResearchPoints, this);
+    }
+
+    public bool IsStable()
+    {
+        return Stability > 0;
+    }
+
+    public void RestoreStability()
+    {
+        Stability = 1;
+    }
+
+    public void Update()
+    {
+        if (Stability > 0)
+        {
+            if (Storage == null)
+                Stability -= (1 / GameData.Data.LevelsData.FreeAnomalObjectBreachTime) * Time.deltaTime;
+            else
+            {
+                float UnprotectedProperties = (float)(Properties - Storage.Protection);
+                if (UnprotectedProperties > 0)
+                    Stability -= Mathf.Lerp(1 / GameData.Data.LevelsData.FreeAnomalObjectBreachTime,
+                                            1 / GameData.Data.LevelsData.OnePointAnomalObjectBreachTime,
+                                            (UnprotectedProperties - 1) / (ImpactFactors.FieldsCount * ImpactFactors.MaxValue - 1)) * Time.deltaTime;
+                else
+                    Stability -= (1 / GameData.Data.LevelsData.ProtectedAnomalObjectBreachTime) * Time.deltaTime;
+            }
+        }
+        if (Stability <= 0 && Storage == null)
+        {
+            string Action = "missed";
+            if (Properties.WillFactor > 3)
+                Action = "escaped";
+            Kanban.Board.AnomalObjectMissed(string.Format("Object {0} {1} {2} from entrepot", ID.ToString(), Name, Action), null);
+            SessionData.Data.Warehouse.MissAnomalObject(ID);
+            if (PlayerController.MainController.CurrentMode == PlayerController.ControlMode.AnomalObjectControl &&
+                PlayerController.MainController.IsAnomalObjectSelected(this))
+                PlayerController.MainController.SetDefaultMode();
+        }
     }
 }

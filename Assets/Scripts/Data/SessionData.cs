@@ -38,11 +38,11 @@ public class SessionData : MonoBehaviour {
 
     //Test functions
 
-    public void SpawnAnomalObject()
+    /*public void SpawnAnomalObject()
     {
         Data.Warehouse.SpawnAnomalObject();
         //Data.Warehouse.AddAnomalObject(new AnomalObject(0, "Test Object", "", 100, "Test description", new ResearchRepot[0], new ImpactFactors(0)));
-    }
+    }*/
 }
 
 [System.Serializable]

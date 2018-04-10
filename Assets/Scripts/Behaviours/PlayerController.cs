@@ -43,6 +43,11 @@ public class PlayerController : MonoBehaviour
         return ControllingBuilding == building;
     }
 
+    public bool IsAnomalObjectSelected(AnomalObject anomalObject)
+    {
+        return PlacingObject == anomalObject;
+    }
+
     public void ShowReport(Report report)
     {
         ReportUI.UI.SetReport(report);
@@ -190,7 +195,7 @@ public class PlayerController : MonoBehaviour
             MainUIRaycaster.enabled = false;
             OverlayBG.enabled = true;
             LastMode = CurrentMode;
-            CurrentMode = ControlMode.BuildingControl;
+            CurrentMode = ControlMode.OverlayWindow;
         }
         OverlayStack.Push(overlayWindow);
             OverlayBG.transform.SetSiblingIndex(Canvas.childCount - 1);
@@ -237,9 +242,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetAxis("Cancel") != 0)
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            SetDefaultMode();
+            if (CurrentMode != ControlMode.OverlayWindow)
+                SetDefaultMode();
+            else
+                CloseTopOverlayWindow();
         }
         switch (CurrentMode)
         {

@@ -65,7 +65,8 @@ public class EntrepotUI : UICollabsiblePanel {
 
     private void OnEnable()
     {
-        RefreshData();
+        if (SessionData.Data != null)
+            RefreshData();
     }
 
     void Awake ()

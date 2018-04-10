@@ -181,7 +181,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.717, g: 0.283, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.566, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -236,6 +236,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Progress: 1
   Color0: {r: 1, g: 0, b: 0, a: 1}
+  Color0_5: {r: 1, g: 1, b: 0, a: 1}
   Color1: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &114646376020002546
 MonoBehaviour:
@@ -277,6 +278,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Progress: 0.283
   Color0: {r: 1, g: 0, b: 0, a: 1}
+  Color0_5: {r: 1, g: 1, b: 0, a: 1}
   Color1: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &114777495457891820
 MonoBehaviour:

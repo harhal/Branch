@@ -62,6 +62,51 @@
                 "Profession": 1
             },
             {
+                "ID": 542,
+                "Name": "TestOperative4",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "Profession": 1
+            },
+            {
+                "ID": 544,
+                "Name": "TestOperative5",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "Profession": 1
+            },
+            {
+                "ID": 546,
+                "Name": "TestOperative6",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "Profession": 1
+            },
+            {
+                "ID": 548,
+                "Name": "TestOperative7",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "Profession": 1
+            },
+            {
+                "ID": 549,
+                "Name": "TestOperative8",
+                "Sex": 0,
+                "photo": "Pictures/Faces/Default",
+                "Level": 1,
+                "Experience": 0.0,
+                "Profession": 1
+            },
+            {
                 "ID": 552,
                 "Name": "TestScientist1",
                 "Sex": 0,
@@ -3849,7 +3894,7 @@
         "anomalObjects": []
     },
     "Bureau": {
-		"TimeToNextOperation" : 10.0,
+		"TimeToNextOperation" : 1.0,
         "CurrentOperations": [],
         "operationStack": []
     }

@@ -78,7 +78,7 @@ public class FieldOperation
 
     public void ChoseOperatives()
     {
-        PlayerController.MainController.ShowPeopleControl("Operatives", SessionData.Data.ResourceStorage.FreeOperatives, new List<Human>(), 7, SendOperatives);
+        PlayerController.MainController.ShowPeopleControl("Operatives", SessionData.Data.ResourceStorage.FreeOperatives, new List<Human>(), 15, SendOperatives);
     }
 
     public void SendOperatives(List<Human> operatives)
@@ -208,6 +208,7 @@ public class FieldOperation
         PreOperationReport.isVariable = false;
         if (OperationPoints < MinOperationPoints)
         {
+            Kanban.Board.CaptureOperationIsOver("Mission failed", BadEndingReport);
             if (FieldAgentIsValid)
             {
                 if (AgentDeathChance * GameData.Data.LevelsData.GetAgentDeathChanceAtLevel(SessionData.Data.ResourceStorage.People[FieldAgent].Level) > Random.value)
@@ -223,11 +224,11 @@ public class FieldOperation
             BadEndingReport.Summary = Necrology;
             string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
             BadEndingReport.Description = string.Format(BadEndingReport.Description, SessionData.Data.PlayerName, BonusHumanName);
-            Kanban.Board.CaptureOperationIsOver("Mission failed", BadEndingReport);
             SessionData.Data.ResourceStorage.ChangeReputation(-ReputationPenalty);
         }
         else if (OperationPoints < GoodOperationPoints)
         {
+            Kanban.Board.CaptureOperationIsOver("Mission completed", NormalEndingReport);
             SessionData.Data.ResourceStorage.People[FieldAgent].Fire();
             NormalEndingReport.Summary = Necrology;
             if (RewardIsValid)
@@ -242,10 +243,10 @@ public class FieldOperation
             string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
             string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
             NormalEndingReport.Description = string.Format(NormalEndingReport.Description, SessionData.Data.PlayerName, BonusHumanName, AgentName);
-            Kanban.Board.CaptureOperationIsOver("Mission completed", NormalEndingReport);
         }
         else
         {
+            Kanban.Board.CaptureOperationIsOver("Mission completed", GoodEndingReport);
             SessionData.Data.ResourceStorage.People[FieldAgent].Fire();
             GoodEndingReport.Summary = Necrology;
             if (RewardIsValid)
@@ -260,7 +261,6 @@ public class FieldOperation
             string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
             string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
             GoodEndingReport.Description = string.Format(GoodEndingReport.Description, SessionData.Data.PlayerName, BonusHumanName, AgentName);
-            Kanban.Board.CaptureOperationIsOver("Mission completed", GoodEndingReport);
             if (BonusReward != null)
             {
                 BonusReward.Register();

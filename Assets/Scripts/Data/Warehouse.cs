@@ -5,7 +5,6 @@ using UnityEngine;
 [System.Serializable]
 public class Warehouse
 {
-    //public event Action DataChanged;
     [SerializeField]
     int[] usedAnomalObjects;
     [SerializeField]
@@ -13,24 +12,7 @@ public class Warehouse
 
     [System.NonSerialized]
     public HashSet<int> UsedAnomalObjects;
-    //[System.NonSerialized]
-    //Dictionary<int, AnomalObject> _anomalObjects;
     public Dictionary<int, AnomalObject> AnomalObjects;
-    /*{
-        get
-        {
-            if (_anomalObjects == null)
-            {
-                _anomalObjects = new Dictionary<int, AnomalObject>();
-                if (anomalObject != null)
-                    foreach (var item in anomalObject)
-                    {
-                        _anomalObjects.Add(item.ID, item);
-                    }
-            }
-            return _anomalObjects;
-        }
-    }*/
 
     public Warehouse()
     {
@@ -44,7 +26,12 @@ public class Warehouse
         UsedAnomalObjects.Add(ID);
     }
 
-    public void SpawnAnomalObject() //Debug
+    public void MissAnomalObject(int anomalObject)
+    {
+        AnomalObjects.Remove(anomalObject);
+    }
+
+    /*public void SpawnAnomalObject() //Debug
     {
         foreach (var item in GameData.Data.AnomalObjects.Keys)
         {
@@ -55,7 +42,7 @@ public class Warehouse
                 return;
             }
         }
-    }
+    }*/
 
     internal void PrepareToSave()
     {

@@ -107,7 +107,13 @@
             { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
             { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] },
             { "Discoveries": [ "New tech lvl 1", "New tech lvl2", "New tech lvl 3", "New tech lvl 4", "", "", "", "", "", "" ] }
-        ]
+        ],
+        "FreeAnomalObjectBreachTime" : 10,
+        "OnePointAnomalObjectBreachTime" : 300,
+        "ProtectedAnomalObjectBreachTime" : 600,
+        "BaseChaosLevelTick": 3,
+        "UnprotectedPointChaosLevelTick": 0.5,
+        "MaxChaosLevel":  100
     },
     "anomalObjects": [
         {
@@ -134,7 +140,8 @@
                 "BiohazardFactor": 0.0
             },
             "storageIsValid": false,
-            "storage": 0
+            "storage": 0,
+            "Stability":  1
         },
         {
             "ID": 214,
@@ -165,7 +172,7 @@
     ],
     "FieldOperations": [
         {
-			"Name" : "TestOperation1",
+			      "Name" : "TestOperation1",
             "InvestigationTime": 20.0,
             "PreOperationTime": 20.0,
             "OperationTime": 10.0,

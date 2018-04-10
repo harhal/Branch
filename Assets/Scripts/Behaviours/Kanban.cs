@@ -12,6 +12,7 @@ public class Kanban : MonoBehaviour
 
     //AnomalObject
     public event InvokedAction OnNewAnomalObject;
+    public event InvokedAction OnAnomalObjectMissed;
     public event InvokedAction OnAnomalObjectMoved;
     public event InvokedAction OnResearchesUpdated;
     public event InvokedAction OnContaintmentBreach;
@@ -41,6 +42,7 @@ public class Kanban : MonoBehaviour
     public event Action OnDefeat;
 
     public void NewAnomalObject(string Description, object Invoker) { OnNewAnomalObject(Description, Invoker); }
+    public void AnomalObjectMissed(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); }
     public void AnomalObjectMoved(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); }
     public void ResearchesUpdated(string Description, object Invoker) { OnResearchesUpdated(Description, Invoker); }
     public void ContaintmentBreach(string Description, object Invoker) { OnContaintmentBreach(Description, Invoker); }

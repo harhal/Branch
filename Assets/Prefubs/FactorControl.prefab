@@ -167,6 +167,7 @@ MonoBehaviour:
   UpgradedProtection: {fileID: 114354623289846520}
   ResearchedTech: {fileID: 114343016446007048}
   ButtonAdd: {fileID: 114352082675176492}
+  Researched: 0
 --- !u!114 &114107783079113986
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -234,6 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Progress: 0.179
   Color0: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
+  Color0_5: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
   Color1: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
 --- !u!114 &114225171242971816
 MonoBehaviour:
@@ -302,6 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Progress: 0.393
   Color0: {r: 0, g: 0, b: 1, a: 1}
+  Color0_5: {r: 0, g: 0, b: 1, a: 1}
   Color1: {r: 0, g: 0, b: 1, a: 1}
 --- !u!114 &114352082675176492
 MonoBehaviour:
@@ -367,7 +370,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.717, g: 0.283, b: 0, a: 1}
+  m_Color: {r: 1, g: 0.566, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -395,6 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Progress: 0.283
   Color0: {r: 1, g: 0, b: 0, a: 1}
+  Color0_5: {r: 1, g: 1, b: 0, a: 1}
   Color1: {r: 0, g: 1, b: 0, a: 1}
 --- !u!114 &114427308341647686
 MonoBehaviour:

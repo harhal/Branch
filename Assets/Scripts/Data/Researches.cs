@@ -14,17 +14,20 @@ public class Researches
         ResearchesProgress += Researches;
         for (int i = 0; i < ImpactFactors.FieldsCount; i++)
         {
-            if (ResearchedTechs[i] >= ImpactFactors.MaxValue)
+            if (i != 6)
             {
-                ResearchesProgress[i] = 0;
-                ResearchedTechs[i] = ImpactFactors.MaxValue;
-            }
-            if (ResearchesProgress[i] > GameData.Data.LevelsData.GetResearchesPointsToNextLevel((int)ResearchedTechs[i]))
-            {
-                ResearchesProgress[i] = ResearchesProgress[i] - GameData.Data.LevelsData.GetResearchesPointsToNextLevel((int)ResearchedTechs[i]);
-                ResearchedObject.Description += '\n' + GameData.Data.LevelsData.GetDiscoveryDescription(i, (int)ResearchedTechs[i]);
-                Kanban.Board.ResearchesUpdated("New technogy discovered", ResearchedObject);
-                ResearchedTechs[i]++;
+                if (ResearchedTechs[i] >= ImpactFactors.MaxValue)
+                {
+                    ResearchesProgress[i] = 0;
+                    ResearchedTechs[i] = ImpactFactors.MaxValue;
+                }
+                if (ResearchesProgress[i] > GameData.Data.LevelsData.GetResearchesPointsToNextLevel((int)ResearchedTechs[i]))
+                {
+                    ResearchesProgress[i] = ResearchesProgress[i] - GameData.Data.LevelsData.GetResearchesPointsToNextLevel((int)ResearchedTechs[i]);
+                    ResearchedObject.Description += '\n' + GameData.Data.LevelsData.GetDiscoveryDescription(i, (int)ResearchedTechs[i]);
+                    Kanban.Board.ResearchesUpdated("New technogy discovered", ResearchedObject);
+                    ResearchedTechs[i]++;
+                }
             }
         }
     }

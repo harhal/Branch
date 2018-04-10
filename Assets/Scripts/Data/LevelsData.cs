@@ -27,6 +27,12 @@ public class LevelsData {
     [SerializeField] float[] ScientistDeathChance;
     [SerializeField] float[] PropertyToResearches;
     [SerializeField] TechDiscoveries[] Discoveries;
+    public float FreeAnomalObjectBreachTime;
+    public float OnePointAnomalObjectBreachTime;
+    public float ProtectedAnomalObjectBreachTime;
+    public float BaseChaosLevelTick;
+    public float UnprotectedPointChaosLevelTick;
+    public float MaxChaosLevel;
 
     float GetArrayValue(float[] array, int index)
     {
