@@ -14,9 +14,9 @@ public class ObjectStorage : Building {
     [SerializeField]
     int anomalObjectID;
     public ImpactFactors Protection;
-    public int WorkingScientists;
+    //public int WorkingScientists;
     public List<int> Scientists;
-    public int WorkingOperatives;
+    //public int WorkingOperatives;
     public List<int> Guard;
     public List<int> Liquidators;
     [SerializeField] float ChaosLevel;
@@ -74,6 +74,11 @@ public class ObjectStorage : Building {
         }
     }
 
+    public Human GetHumanByID(int id)
+    {
+        return SessionData.Data.ResourceStorage.People[id];
+    }
+
     public ObjectStorage()
     {
         Scientists = new List<int>();
@@ -90,7 +95,7 @@ public class ObjectStorage : Building {
     {
         float ControlLevel = 0;
         foreach (var item in Guard)
-            ControlLevel += GameData.Data.LevelsData.GetOperativePointsAtLevel(SessionData.Data.ResourceStorage.People[item].Level);
+            ControlLevel += GameData.Data.LevelsData.GetOperativePointsAtLevel(GetHumanByID(item).Level);
         Protection.WillFactor = Mathf.Clamp(Mathf.Floor(ControlLevel / (4 * GameData.Data.LevelsData.GetOperativePointsAtLevel(10)) * 10), 0, 10);
     }
 
@@ -99,6 +104,13 @@ public class ObjectStorage : Building {
         ChaosLevel = GameData.Data.LevelsData.MaxChaosLevel / 2;
         Liquidators.AddRange(Guard.ToArray());
         Kanban.Board.ContaintmentBreach(string.Format("Object {0} {1} out of control", anomalObject.ID, anomalObject.Name), this);
+        foreach (var item in Scientists)
+        {
+            if (GetHumanByID(item).Activity == Human.ActivityType.Working)
+                GetHumanByID(item).Activity = Human.ActivityType.Blocked;
+            else
+                GetHumanByID(item).Fire();
+        }
         if (PlayerController.MainController.CurrentMode == PlayerController.ControlMode.BuildingControl &&
             PlayerController.MainController.IsBuildingSelected(this))
             ObjectStorageUI.UI.RefreshData();
@@ -119,75 +131,25 @@ public class ObjectStorage : Building {
             if (Guard.Contains(liquidator))
                 NewGuard.Add(liquidator);
             else
-                SessionData.Data.ResourceStorage.People[liquidator].Fire();
+                GetHumanByID(liquidator).Fire();
         }
         Kanban.Board.ContaintmentRestored(string.Format("Control of the Object {0} {1} restored", anomalObject.ID, anomalObject.Name), this);
         RefreshWillProtection();
         Liquidators.Clear();
+        foreach (var item in Scientists)
+            GetHumanByID(item).Activity = Human.ActivityType.Working;
         if (PlayerController.MainController.CurrentMode == PlayerController.ControlMode.BuildingControl &&
             PlayerController.MainController.IsBuildingSelected(this))
             ObjectStorageUI.UI.RefreshData();
     }
-
-    /*
-
-    public void HireScientist()
-    {
-        //HiredScientists++;
-        WorkingScientists++;// = HiredScientists;
-        var scientist = SessionData.Data.ResourceStorage.GetFreeScientist();
-        SessionData.Data.ResourceStorage.Send(scientist, this);
-        Scientists.Add(scientist.ID);
-    }
-
-    public void FireScientist()
-    {
-        //HiredScientists--;
-        WorkingScientists--;// = HiredScientists;
-        SessionData.Data.ResourceStorage.Return(SessionData.Data.ResourceStorage.People[Scientists[0]]);
-        Scientists.Remove(Scientists[0]);
-    }
-
-    public void KillScientist()
-    {
-        //HiredScientists--;
-        WorkingScientists--;// = HiredScientists;
-        SessionData.Data.ResourceStorage.Kill(SessionData.Data.ResourceStorage.People[Scientists[0]]);
-        Scientists.Remove(Scientists[0]);
-    }
-
-    public void HireGuard()
-    {
-        //HiredOperatives++;
-        WorkingOperatives++;// = HiredOperatives;
-        var guard = SessionData.Data.ResourceStorage.GetFreeOperative();
-        SessionData.Data.ResourceStorage.Send(guard, this);
-        Guard.Add(guard.ID);
-    }
-
-    public void FireGuard()
-    {
-        //HiredOperatives--;
-        WorkingOperatives--;// = HiredOperatives;
-        SessionData.Data.ResourceStorage.Return(SessionData.Data.ResourceStorage.People[Guard[0]]);
-        Guard.Remove(Guard[0]);
-    }
-
-    public void KillGuard()
-    {
-        //HiredOperatives--;
-        WorkingOperatives--;// = HiredOperatives;
-        SessionData.Data.ResourceStorage.Kill(SessionData.Data.ResourceStorage.People[Guard[0]]);
-        Guard.Remove(Guard[0]);
-    }*/
 
     public override void Update () {
         if (anomalObject == null) return;
         if (anomalObject.Progress < 1 && anomalObject.IsStable())
         {
             foreach (var scientist in Scientists)
-                if (SessionData.Data.ResourceStorage.People[scientist].Activity == Human.ActivityType.Working)
-                    anomalObject.Research(GameData.Data.LevelsData.GetScientistPointsAtLevel(SessionData.Data.ResourceStorage.People[scientist].Level) * Time.deltaTime);
+                if (GetHumanByID(scientist).Activity == Human.ActivityType.Working)
+                    anomalObject.Research(GameData.Data.LevelsData.GetScientistPointsAtLevel(GetHumanByID(scientist).Level) * Time.deltaTime);
         }
         if (!anomalObject.IsStable())
         {
@@ -201,11 +163,21 @@ public class ObjectStorage : Building {
                 ChaosLevel = GameData.Data.LevelsData.MaxChaosLevel;
             foreach (var liquidator in Liquidators)
             {
-                if (SessionData.Data.ResourceStorage.People[liquidator].Activity == Human.ActivityType.Working)
-                    ChaosLevel -= GameData.Data.LevelsData.GetOperativePointsAtLevel(SessionData.Data.ResourceStorage.People[liquidator].Level) * Time.deltaTime;
+                if (GetHumanByID(liquidator).Activity == Human.ActivityType.Working)
+                    ChaosLevel -= GameData.Data.LevelsData.GetOperativePointsAtLevel(GetHumanByID(liquidator).Level) * Time.deltaTime;
             }
             if (ChaosLevel <= 0)
                 ContaintementRestored();
         }
+    }
+
+    internal override void InitAfterLoad()
+    {
+        foreach (var item in Scientists)
+            GetHumanByID(item).Destination = this;
+        foreach (var item in Guard)
+            GetHumanByID(item).Destination = this;
+        foreach (var item in Liquidators)
+            GetHumanByID(item).Destination = this;
     }
 }

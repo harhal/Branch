@@ -11,7 +11,7 @@ public class Human {
     public SexType Sex;
     public enum ProfessionType { Agent, Operative, Scientist, D_Personnel }
     public ProfessionType Profession;
-    public enum ActivityType { Free, Going, Working };
+    public enum ActivityType { Free, Going, Working, Blocked };
     public ActivityType Activity;
     //public float WalkingProgress;
     public Vector3 Location;
@@ -65,7 +65,7 @@ public class Human {
         SessionData.Data.ResourceStorage.Kill(this);
     }
 
-    public void SendTo(object destination)
+    protected void SendTo(object destination)
     {
         Destination = destination;
         Activity = ActivityType.Going;

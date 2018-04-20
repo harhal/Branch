@@ -40,19 +40,19 @@ public class EventStack : MonoBehaviour {
     public Sprite DPersonnelHiredIcon;
     public Sprite DPersonnelDiedIcon;
 
-    void CreateNewAnomalObjectIcon              (string Description, object Invoker) { AddItem(NewAnomalObjectIcon, Invoker);}
+    void CreateNewAnomalObjectIcon              (string Description, object Invoker) { AddItem(NewAnomalObjectIcon, Invoker); TimeController.timeController.SetTimeScale(0); }
     void CreateAnomalObjectMissedIcon            (string Description, object Invoker) { AddItem(AnomalObjectMovedIcon, Invoker);}
     void CreateAnomalObjectMovedIcon            (string Description, object Invoker) { AddItem(AnomalObjectMovedIcon, Invoker);}
     void CreateResearchesUpdatedIcon            (string Description, object Invoker) { AddItem(ResearchesUpdatedIcon, Invoker);}
-    void CreateContaintmentBreachIcon           (string Description, object Invoker) { AddItem(ContaintmentBreachIcon, Invoker);}
+    void CreateContaintmentBreachIcon           (string Description, object Invoker) { AddItem(ContaintmentBreachIcon, Invoker); TimeController.timeController.SetTimeScale(0); }
     void CreateContaintmentRestoredIcon         (string Description, object Invoker) { AddItem(ContaintmentRestoredIcon, Invoker);}
     void CreateBuildingProcessStartedIcon       (string Description, object Invoker) { AddItem(BuildingProcessStartedIcon, Invoker);}
     void CreateBuildingProcessIsOverIcon        (string Description, object Invoker) { AddItem(BuildingProcessIsOverIcon, Invoker);}
     void CreateObjectStorageDestroyedIcon       (string Description, object Invoker) { AddItem(ObjectStorageDestroyedIcon, Invoker);}
-    void CreateFirstIncedentReportIcon          (string Description, object Invoker) { AddItem(FirstIncedentReportIcon, Invoker);}
+    void CreateFirstIncedentReportIcon          (string Description, object Invoker) { AddItem(FirstIncedentReportIcon, Invoker); TimeController.timeController.SetTimeScale(0); }
     void CreateInvestigationStartedIcon         (string Description, object Invoker) { AddItem(InvestigationStartedIcon, Invoker);}
-    void CreateInvestigationStoppedIcon         (string Description, object Invoker) { AddItem(InvestigationStoppedIcon, Invoker);}
-    void CreateCaptureOperationReadyToStartIcon (string Description, object Invoker) { AddItem(CaptureOperationReadyToStartIcon, Invoker);}
+    void CreateInvestigationStoppedIcon         (string Description, object Invoker) { AddItem(InvestigationStoppedIcon, Invoker); TimeController.timeController.SetTimeScale(0); }
+    void CreateCaptureOperationReadyToStartIcon (string Description, object Invoker) { AddItem(CaptureOperationReadyToStartIcon, Invoker); TimeController.timeController.SetTimeScale(0); }
     void CreateCaptureOperationStartedIcon      (string Description, object Invoker) { AddItem(CaptureOperationStartedIcon, Invoker);}
     void CreateCaptureOperationIsOverIcon       (string Description, object Invoker) { AddItem(CaptureOperationIsOverIcon, Invoker);}
     void CreateAgentHiredIcon                   (string Description, object Invoker) { AddItem(AgentHiredIcon, Invoker);}
@@ -82,7 +82,7 @@ public class EventStack : MonoBehaviour {
             NewIndicator.SetActive(false);
             StackObject.offsetMax = new Vector2();
         }
-        Scroll.verticalNormalizedPosition = -0.2f;
+        Scroll.verticalNormalizedPosition = -0.1f;
     }
 
     /**public LogItem AddItem(Report report)

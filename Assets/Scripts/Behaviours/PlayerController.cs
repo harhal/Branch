@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
@@ -142,6 +143,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void ShowPauseMenu()
+    {
+
+    }
+
+    public void ClosePauseMenu()
+    {
+
+    }
+
     public void SetDefaultMode()
     {
         CameraControl.MainCamera.Free();
@@ -198,8 +209,8 @@ public class PlayerController : MonoBehaviour
             CurrentMode = ControlMode.OverlayWindow;
         }
         OverlayStack.Push(overlayWindow);
-            OverlayBG.transform.SetSiblingIndex(Canvas.childCount - 1);
-            overlayWindow.transform.SetSiblingIndex(Canvas.childCount - 1);
+        OverlayBG.transform.SetSiblingIndex(Canvas.childCount - 1);
+        overlayWindow.transform.SetSiblingIndex(Canvas.childCount - 1);
         overlayWindow.Show();
     }
 
@@ -217,7 +228,22 @@ public class PlayerController : MonoBehaviour
                 OverlayBG.enabled = false;
                 CurrentMode = LastMode;
             }
+            else
+            {
+                OverlayBG.transform.SetSiblingIndex(Canvas.childCount - 1);
+                OverlayStack.Peek().transform.SetSiblingIndex(Canvas.childCount - 1);
+            }
         }
+    }
+
+    public void ToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void LoadLastSave()
+    {
+        SceneManager.LoadScene(1);
     }
 
     private void Awake()

@@ -8,12 +8,19 @@ public class SessionData : MonoBehaviour {
 
     public static SessionDataPackage Data;
 
+    public static string ProfileName = "";
+
     internal void LoadFromJson(string path)
     {
         string json = System.IO.File.OpenText(path).ReadToEnd();
         var gameData = JsonUtility.FromJson<SessionDataPackage>(json);
         Data = gameData;
         Data.InitAfterLoad();
+    }
+
+    public void Save()
+    {
+        SaveToJson("Saves/" + ProfileName + "/OnlySave.json");
     }
 
     internal void SaveToJson(string path)
@@ -27,7 +34,12 @@ public class SessionData : MonoBehaviour {
     void Start () {
         if (Data == null)
             Data = new SessionDataPackage();
-        LoadFromJson("Assets/Data/InitSessionData.json");
+        if (ProfileName != "")
+            LoadFromJson("Saves/" + ProfileName + "/OnlySave.json");
+        else
+            LoadFromJson("Assets/Data/InitSessionData.json");
+        if (Data.PlayerName != ProfileName)
+            Data.PlayerName = ProfileName;
         Data.Bureau.GenerateOperationStack();
     }
 

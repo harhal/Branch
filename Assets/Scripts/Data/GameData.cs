@@ -6,6 +6,8 @@ public class GameData : MonoBehaviour {
 
     public static PackagedGameData Data;
 
+    public static string DataPath = "Assets/Data/GameData.json";
+
     public void LoadFromJson(string path)
     {
         string json = System.IO.File.OpenText(path).ReadToEnd();
@@ -23,7 +25,7 @@ public class GameData : MonoBehaviour {
     void Awake ()
     {
         if (Data == null)
-            LoadFromJson("Assets/Data/GameData.json");
+            LoadFromJson(DataPath);
     }
 	
 	// Update is called once per frame

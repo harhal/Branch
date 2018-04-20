@@ -59,6 +59,7 @@ public class HumanUI : UICollabsiblePanel {
                 case Human.ActivityType.Free: { ActivityIco.color = Color.green; break; }
                 case Human.ActivityType.Going: { ActivityIco.color = Color.yellow; break; }
                 case Human.ActivityType.Working: { ActivityIco.color = Color.red; break; }
+                case Human.ActivityType.Blocked: { ActivityIco.color = Color.gray; break; }
             }
         if (ActivityText != null)
             switch (human.Activity)
@@ -66,6 +67,7 @@ public class HumanUI : UICollabsiblePanel {
                 case Human.ActivityType.Free: { ActivityText.text = "Free"; break; }
                 case Human.ActivityType.Going: { ActivityText.text = "Going to work"/* + human.GetWorkSpaceName()*/; break; }
                 case Human.ActivityType.Working: { ActivityText.text = "Working"/* + human.GetWorkSpaceName()*/; break; }
+                case Human.ActivityType.Blocked: { ActivityText.text = "Unactive"/* + human.GetWorkSpaceName()*/; break; }
             }
     }
 

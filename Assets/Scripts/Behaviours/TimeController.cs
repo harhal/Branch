@@ -11,6 +11,7 @@ public class TimeController : MonoBehaviour {
     public Button Play;
     public Button X2;
     public Button X5;
+    public Text PauseText;
 
     private void Awake()
     {
@@ -23,7 +24,9 @@ public class TimeController : MonoBehaviour {
         Time.timeScale = TimeScale;
     }
 
-    void Update () {
+    void Update ()
+    {
+        PauseText.gameObject.SetActive(Time.timeScale == 0);
         if (Time.timeScale == 0)
         {
             Pause.interactable = false;

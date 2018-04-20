@@ -32,7 +32,7 @@ public class FieldOperation
     public InfoReport GoodEndingReport;
 
     public float ReputationPenalty;
-    
+
     public bool BonusRewardIsValid;
     public Human BonusReward;
     public bool RewardIsValid = false;
@@ -123,7 +123,7 @@ public class FieldOperation
                 stage = 2;
                 InvistigationReport.operation = this;
                 string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
-            string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
+                string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
                 InvistigationReport.Description = string.Format(InvistigationReport.Description, SessionData.Data.PlayerName, BonusHumanName, AgentName);
                 Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
             }
@@ -190,7 +190,7 @@ public class FieldOperation
         OperationTime -= Time.deltaTime;
         if (OperationTime <= 0)
             OperationReport();
-}
+    }
 
     void OperationReport()
     {
@@ -290,8 +290,9 @@ public class FieldOperation
             }
         }
     }
-    
-    public void Update () {
+
+    public void Update()
+    {
         if (InvestigationTime > 0)
         {
             TickInvistigation();
