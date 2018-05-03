@@ -57,6 +57,12 @@ public class FieldOperation
             SessionData.Data.ResourceStorage.People[FieldAgent].Destination = this;
         foreach (var item in Operatives)
             SessionData.Data.ResourceStorage.People[item].Destination = this;
+        if (stage > 0)
+            Kanban.Board.FirstIncedentReport("Anomal activity detected", StartReport);
+        if (InvestigationPoints >= InvestigetionBreakPoint && stage > 1)
+            Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
+        if (InvestigationPoints >= MinInvestigationPoints && stage > 2)
+            Kanban.Board.CaptureOperationReadyToStart("Ready to start operation", PreOperationReport);
     }
 
     public void ChoseAgent()
