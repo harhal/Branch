@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class BranchBase
+public class BranchBase: ISerializationCallbackReceiver
 {
     [SerializeField]
     int LastID = 574;
@@ -27,38 +27,36 @@ public class BranchBase
         BuildingsList = new List<Building>();
         //BaseMap = new Dictionary<Building, Vector2Int>();
         BuildingsDB = new Dictionary<int, ObjectStorage>();
-    }    
+    }   
 
-    internal void PrepareToSave()
+    public int GetNewStorageID()
+    {
+        return LastID += (int)Random.Range(1, 20);
+    }
+
+    public void OnBeforeSerialize()
     {
         buildings = new PackagedBuilding[BuildingsList.Count];
         int i = 0;
         foreach (var item in BuildingsList)
         {
-            item.PrepareToSave();
-               buildings[i] = new PackagedBuilding(item);
+            buildings[i] = new PackagedBuilding(item);
             i++;
         }
     }
 
-    internal void InitAfterLoad()
+    public void OnAfterDeserialize()
     {
         BuildingsList = new List<Building>();
         BuildingsDB = new Dictionary<int, ObjectStorage>();
         foreach (var item in buildings)
         {
             var building = item.GetUnpackedBuilding();
-            building.InitAfterLoad();
             BuildingsList.Add(building);
             var storage = building as ObjectStorage;
             if (storage != null)
                 BuildingsDB.Add(storage.ID, storage);
         }
         GridComponent.grid.LoadBuildings();
-    }
-
-    public int GetNewStorageID()
-    {
-        return LastID += (int)Random.Range(1, 20);
     }
 }

@@ -15,7 +15,6 @@ public class SessionData : MonoBehaviour {
         string json = System.IO.File.OpenText(path).ReadToEnd();
         var gameData = JsonUtility.FromJson<SessionDataPackage>(json);
         Data = gameData;
-        Data.InitAfterLoad();
     }
 
     public void Save()
@@ -25,7 +24,6 @@ public class SessionData : MonoBehaviour {
 
     internal void SaveToJson(string path)
     {
-        Data.PrepareToSave();
         string json = JsonUtility.ToJson(Data, true);
         System.IO.File.WriteAllText(path, json);
     }
@@ -66,6 +64,7 @@ public class SessionDataPackage
     public BranchBase BranchBase;
     public Warehouse Warehouse;
     public Bureau Bureau;
+    public TimeLine TimeLine;
     
     public SessionDataPackage()
     {
@@ -74,23 +73,6 @@ public class SessionDataPackage
         BranchBase = new BranchBase(new Vector2Int(24, 39));
         Warehouse = new Warehouse();
         Bureau = new Bureau();
-    }
-
-    internal void PrepareToSave()
-    {
-        Researches.PrepareToSave();
-        ResourceStorage.PrepareToSave();
-        BranchBase.PrepareToSave();
-        Warehouse.PrepareToSave();
-        Bureau.PrepareToSave();
-    }
-
-    internal void InitAfterLoad()
-    {
-        Researches.InitAfterLoad();
-        ResourceStorage.InitAfterLoad();
-        BranchBase.InitAfterLoad();
-        Warehouse.InitAfterLoad();
-        Bureau.InitAfterLoad();
+        TimeLine = new TimeLine();
     }
 }

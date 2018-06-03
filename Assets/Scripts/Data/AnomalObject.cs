@@ -11,7 +11,7 @@ public struct ResearchRepot
 }
 
 [System.Serializable]
-public class AnomalObject
+public class AnomalObject : iTimeEventReason
 {
     public int ID;
     public string Name;
@@ -98,7 +98,8 @@ public class AnomalObject
             if (CurrentResearchPoints >= Reports[currentReport].ProgressPoints)
             {
                 Description += '\n' + Reports[currentReport].Report;
-                Kanban.Board.ResearchesUpdated(Reports[currentReport].Report, this);
+                TimeLine.Add(this, Reports[currentReport].Report);
+                //Kanban.Board.ResearchesUpdated(Reports[currentReport].Report, this);
                 currentReport++;
             }
         }
@@ -137,11 +138,32 @@ public class AnomalObject
             string Action = "missed";
             if (Properties.WillFactor > 3)
                 Action = "escaped";
-            Kanban.Board.AnomalObjectMissed(string.Format("Object {0} {1} {2} from entrepot", ID.ToString(), Name, Action), null);
+            TimeLine.Add(this, string.Format("Object {0} {1} {2} from entrepot", ID.ToString(), Name, Action));
+            //Kanban.Board.AnomalObjectMissed(string.Format("Object {0} {1} {2} from entrepot", ID.ToString(), Name, Action), null);
             SessionData.Data.Warehouse.MissAnomalObject(ID);
             if (PlayerController.MainController.CurrentMode == PlayerController.ControlMode.AnomalObjectControl &&
                 PlayerController.MainController.IsAnomalObjectSelected(this))
                 PlayerController.MainController.SetDefaultMode();
         }
+    }
+
+    public bool IsActual()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OpenUI()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetID()
+    {
+        return ID;
+    }
+
+    public TimeEventType GetReasonType()
+    {
+        return TimeEventType.AnomalObject;
     }
 }

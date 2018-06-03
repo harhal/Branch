@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Warehouse
+public class Warehouse: ISerializationCallbackReceiver
 {
     [SerializeField]
     int[] usedAnomalObjects;
@@ -44,7 +44,7 @@ public class Warehouse
         }
     }*/
 
-    internal void PrepareToSave()
+    public void OnBeforeSerialize()
     {
         anomalObjects = new AnomalObject[AnomalObjects.Count];
         int i = 0;
@@ -55,7 +55,7 @@ public class Warehouse
         }
     }
 
-    internal void InitAfterLoad()
+    public void OnAfterDeserialize()
     {
         AnomalObjects = new Dictionary<int, AnomalObject>();
         if (anomalObjects != null)

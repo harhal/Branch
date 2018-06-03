@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class FieldOperation
+public class FieldOperation : ISerializationCallbackReceiver
 {
     #region Variables
     public string Name;
@@ -49,20 +49,6 @@ public class FieldOperation
         {
             BonusReward = SessionData.Data.ResourceStorage.GetNewHuman(BonusReward.Sex, BonusReward.Profession, 0.1f);
         }
-    }
-
-    internal void InitAfterLoad()
-    {
-        if (FieldAgentIsValid)
-            SessionData.Data.ResourceStorage.People[FieldAgent].Destination = this;
-        foreach (var item in Operatives)
-            SessionData.Data.ResourceStorage.People[item].Destination = this;
-        if (stage > 0)
-            Kanban.Board.FirstIncedentReport("Anomal activity detected", StartReport);
-        if (InvestigationPoints >= InvestigetionBreakPoint && stage > 1)
-            Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
-        if (InvestigationPoints >= MinInvestigationPoints && stage > 2)
-            Kanban.Board.CaptureOperationReadyToStart("Ready to start operation", PreOperationReport);
     }
 
     public void ChoseAgent()
@@ -115,7 +101,8 @@ public class FieldOperation
             PreOperationReport.Summary = "You sent " + Operatives.Count + " operatives to support Object capture";
         else
             PreOperationReport.Summary = "You didn't send operatives to support Object capture";
-        Kanban.Board.CaptureOperationStarted("Capture operation in process", PreOperationReport);
+        TimeLine.Add(PreOperationReport, "Capture operation in process");
+        //Kanban.Board.CaptureOperationStarted("Capture operation in process", PreOperationReport);
         PreOperationTime = 0;
     }
 
@@ -131,7 +118,8 @@ public class FieldOperation
                 string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
                 string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
                 InvistigationReport.Description = string.Format(InvistigationReport.Description, SessionData.Data.PlayerName, BonusHumanName, AgentName);
-                Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
+                TimeLine.Add(InvistigationReport, "Investigation stopped");
+                //Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
             }
             InvestigationPoints += GameData.Data.LevelsData.GetAgentPointsAtLevel(SessionData.Data.ResourceStorage.People[FieldAgent].Level) * Time.deltaTime;
         }
@@ -141,7 +129,8 @@ public class FieldOperation
             StartReport.operation = this;
             string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
             StartReport.Description = string.Format(StartReport.Description, SessionData.Data.PlayerName, BonusHumanName);
-            Kanban.Board.FirstIncedentReport("Anomal activity detected", StartReport);
+            TimeLine.Add(StartReport, "Anomal activity detected");
+            //Kanban.Board.FirstIncedentReport("Anomal activity detected", StartReport);
         }
     }
 
@@ -162,7 +151,8 @@ public class FieldOperation
                 string BonusHumanName = BonusReward != null ? BonusReward.Name : "None";
                 string AgentName = SessionData.Data.ResourceStorage.People[FieldAgent].Name;
                 PreOperationReport.Description = string.Format(PreOperationReport.Description, SessionData.Data.PlayerName, BonusHumanName, AgentName);
-                Kanban.Board.CaptureOperationReadyToStart("Ready to start operation", PreOperationReport);
+                TimeLine.Add(PreOperationReport, "Ready to start operation");
+                //Kanban.Board.CaptureOperationReadyToStart("Ready to start operation", PreOperationReport);
                 if (InvestigationPoints >= GoodInvestigationPoints)
                     OperationPoints = MinOperationPoints;
             }
@@ -214,7 +204,8 @@ public class FieldOperation
         PreOperationReport.isVariable = false;
         if (OperationPoints < MinOperationPoints)
         {
-            Kanban.Board.CaptureOperationIsOver("Mission failed", BadEndingReport);
+            TimeLine.Add(BadEndingReport, "Mission failed");
+            //Kanban.Board.CaptureOperationIsOver("Mission failed", BadEndingReport);
             if (FieldAgentIsValid)
             {
                 if (AgentDeathChance * GameData.Data.LevelsData.GetAgentDeathChanceAtLevel(SessionData.Data.ResourceStorage.People[FieldAgent].Level) > Random.value)
@@ -234,15 +225,17 @@ public class FieldOperation
         }
         else if (OperationPoints < GoodOperationPoints)
         {
-            Kanban.Board.CaptureOperationIsOver("Mission completed", NormalEndingReport);
+            TimeLine.Add(NormalEndingReport, "Mission completed");
+            //Kanban.Board.CaptureOperationIsOver("Mission completed", NormalEndingReport);
             SessionData.Data.ResourceStorage.People[FieldAgent].Fire();
             NormalEndingReport.Summary = Necrology;
             if (RewardIsValid)
             {
                 SessionData.Data.Warehouse.AddAnomalObject(Reward);
                 NormalEndingReport.Summary += SessionData.Data.Warehouse.AnomalObjects[Reward].Name + " added";
-                Kanban.Board.NewAnomalObject("New \"Object\" \"" + SessionData.Data.Warehouse.AnomalObjects[Reward].Name + "\"",
-                    SessionData.Data.Warehouse.AnomalObjects[Reward]);
+                TimeLine.Add(SessionData.Data.Warehouse.AnomalObjects[Reward], "New Object");
+                /*Kanban.Board.NewAnomalObject("New \"Object\" \"" + SessionData.Data.Warehouse.AnomalObjects[Reward].Name + "\"",
+                    SessionData.Data.Warehouse.AnomalObjects[Reward]);*/
             }
             NormalEndingReport.operation = this;
             NormalEndingReport.isVariable = false;
@@ -252,15 +245,17 @@ public class FieldOperation
         }
         else
         {
-            Kanban.Board.CaptureOperationIsOver("Mission completed", GoodEndingReport);
+            TimeLine.Add(GoodEndingReport, "Mission completed");
+            //Kanban.Board.CaptureOperationIsOver("Mission completed", GoodEndingReport);
             SessionData.Data.ResourceStorage.People[FieldAgent].Fire();
             GoodEndingReport.Summary = Necrology;
             if (RewardIsValid)
             {
                 SessionData.Data.Warehouse.AddAnomalObject(Reward);
                 GoodEndingReport.Summary += SessionData.Data.Warehouse.AnomalObjects[Reward].Name + " added\n";
-                Kanban.Board.NewAnomalObject("New \"Object\" \"" + SessionData.Data.Warehouse.AnomalObjects[Reward].Name + "\"",
-                    SessionData.Data.Warehouse.AnomalObjects[Reward]);
+                TimeLine.Add(SessionData.Data.Warehouse.AnomalObjects[Reward], "New Object");
+                /*Kanban.Board.NewAnomalObject("New \"Object\" \"" + SessionData.Data.Warehouse.AnomalObjects[Reward].Name + "\"",
+                    SessionData.Data.Warehouse.AnomalObjects[Reward]);*/
             }
             GoodEndingReport.operation = this;
             GoodEndingReport.isVariable = false;
@@ -312,42 +307,60 @@ public class FieldOperation
             TickOperation();
         }
     }
-}
 
-[System.Serializable]
-public class StartInvestigationReport : Report
-{
-    public override VariantButton[] GetChoises()
+    public void OnBeforeSerialize()
     {
-        if (cashedChoises == null)
-            cashedChoises = new VariantButton[] { new ChoseAgentButton("Send agent"), new CloseButton("Close") };
-        return cashedChoises;
+    }
+
+    public void OnAfterDeserialize()
+    {
+        if (FieldAgentIsValid)
+            SessionData.Data.ResourceStorage.People[FieldAgent].Destination = this;
+        foreach (var item in Operatives)
+            SessionData.Data.ResourceStorage.People[item].Destination = this;
+        /*if (stage > 0)
+            Kanban.Board.FirstIncedentReport("Anomal activity detected", StartReport);
+        if (InvestigationPoints >= InvestigetionBreakPoint && stage > 1)
+            Kanban.Board.InvestigationStopped("Investigation stopped", InvistigationReport);
+        if (InvestigationPoints >= MinInvestigationPoints && stage > 2)
+            Kanban.Board.CaptureOperationReadyToStart("Ready to start operation", PreOperationReport);*/
     }
 }
 
-[System.Serializable]
-public class DecisionReport : Report
-{
-    [SerializeField]
-    OperationActionButton[] DecisionChoises;
-
-    public override VariantButton[] GetChoises()
+    [System.Serializable]
+    public class StartInvestigationReport : Report
     {
-        if (cashedChoises == null)
+        public override VariantButton[] GetChoises()
         {
-            if (DecisionChoises != null)
-            {
-                cashedChoises = new VariantButton[DecisionChoises.Length];
-
-                for (int i = 0; i < DecisionChoises.Length; i++)
-                    cashedChoises[i] = DecisionChoises[i];
-            }
-            else
-                cashedChoises = new VariantButton[0];
+            if (cashedChoises == null)
+                cashedChoises = new VariantButton[] { new ChoseAgentButton("Send agent"), new CloseButton("Close") };
+            return cashedChoises;
         }
-        return cashedChoises;
     }
-}
+
+    [System.Serializable]
+    public class DecisionReport : Report
+    {
+        [SerializeField]
+        OperationActionButton[] DecisionChoises;
+
+        public override VariantButton[] GetChoises()
+        {
+            if (cashedChoises == null)
+            {
+                if (DecisionChoises != null)
+                {
+                    cashedChoises = new VariantButton[DecisionChoises.Length];
+
+                    for (int i = 0; i < DecisionChoises.Length; i++)
+                        cashedChoises[i] = DecisionChoises[i];
+                }
+                else
+                    cashedChoises = new VariantButton[0];
+            }
+            return cashedChoises;
+        }
+    }
 
 [System.Serializable]
 public class StartOperationReport : Report
@@ -355,10 +368,10 @@ public class StartOperationReport : Report
     public override VariantButton[] GetChoises()
     {
         if (cashedChoises == null)
-            cashedChoises = new VariantButton[] 
+            cashedChoises = new VariantButton[]
             {
                 new ChoseOperativesButton("Send operatives"),
-                new CustomButton("Start capture operation", delegate() 
+                new CustomButton("Start capture operation", delegate()
                 {
                     ReportUI.UI.CurrentReport.operation.StartOperation();
                 }),

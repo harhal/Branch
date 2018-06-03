@@ -126,7 +126,7 @@ public struct HumanResource
 }*/
 
 [System.Serializable]
-public class ResourceStorage
+public class ResourceStorage: ISerializationCallbackReceiver
 {
     public int Money;
     [SerializeField] int LastHumanID = 526;
@@ -378,7 +378,7 @@ public class ResourceStorage
     }*/
     /////////////////////////////
 
-    internal void PrepareToSave()
+    public void OnBeforeSerialize()
     {
         people = new Human[People.Count];
         int i = 0;
@@ -405,7 +405,7 @@ public class ResourceStorage
             }
     }
 
-    internal void InitAfterLoad()
+    public void OnAfterDeserialize()
     {
         People = new Dictionary<int, Human>();
         FreeAgents = new List<Human>();

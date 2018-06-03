@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Human {
+public class Human : iTimeEventReason
+{
     public int ID;
     public string Name;
     public enum SexType { Male, Female, NoMatter };
@@ -77,5 +77,25 @@ public class Human {
             Activity = ActivityType.Free;
         else
             Activity = ActivityType.Working;
+    }
+
+    public bool IsActual()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OpenUI()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetID()
+    {
+        return ID;
+    }
+
+    public TimeEventType GetReasonType()
+    {
+        return TimeEventType.Human;
     }
 }

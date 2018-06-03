@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 
 [System.Serializable]
-public class BuildingInProcess : Building {
+public class BuildingInProcess : Building, ISerializationCallbackReceiver
+{
 
     [SerializeField]
     PackagedBuilding nextBuilding;
@@ -14,7 +14,7 @@ public class BuildingInProcess : Building {
     public float Timer;
     public bool IsActive;
 
-    [NonSerialized]
+    [System.NonSerialized]
     public Building NextBuilding;
 
     public BuildingInProcess(Building NextBuilding, string Description, float BuildingTime, bool Activity = true)
@@ -63,13 +63,11 @@ public class BuildingInProcess : Building {
         return Mathf.Clamp(Timer / BuildingTime, 0f, 1f);
     }
 
-    internal override void PrepareToSave()
+    public void OnBeforeSerialize()
     {
-        nextBuilding = new PackagedBuilding(NextBuilding);
     }
 
-    internal override void InitAfterLoad()
+    public void OnAfterDeserialize()
     {
-        NextBuilding = nextBuilding.GetUnpackedBuilding();
     }
 }

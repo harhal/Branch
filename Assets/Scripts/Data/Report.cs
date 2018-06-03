@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Report
+public class Report: iTimeEventReason
 {
+    public int ID;
     [SerializeField]
     string photo;
     public string Description;
@@ -32,6 +33,21 @@ public class Report
         if (cashedChoises == null)
             cashedChoises = new VariantButton[0];
         return cashedChoises;
+    }
+
+    public bool IsActual()
+    {
+        return isVariable;
+    }
+
+    public int GetID()
+    {
+        return ID;
+    }
+
+    public void OpenUI()
+    {
+        throw new NotImplementedException();
     }
 }
 

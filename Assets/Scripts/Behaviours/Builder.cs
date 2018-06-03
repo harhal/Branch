@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -79,7 +78,7 @@ public class Builder : UICollabsiblePanel {
     {
         if (building == null)
             return Instantiate(VoidPrototype);
-        Type type = building.GetType();
+        System.Type type = building.GetType();
         if (type == typeof(SoilBlock))
             return Instantiate(SoilPrototype);
         if (type == typeof(BuildingInProcess))

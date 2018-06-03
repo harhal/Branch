@@ -18,10 +18,6 @@ public class Building
 
     public virtual void HighLight(HighlightType highlightType, Renderer renderer) { }
     public virtual void Update() { }
-
-    internal virtual void PrepareToSave() { }
-
-    internal virtual void InitAfterLoad() { }
 }
 
 [System.Serializable]

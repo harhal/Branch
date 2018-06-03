@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Bureau {
+public class Bureau: ISerializationCallbackReceiver {
     public List<FieldOperation> CurrentOperations;
     [SerializeField]
     int[] operationStack;
@@ -12,6 +12,8 @@ public class Bureau {
 
     [System.NonSerialized]
     public Stack<int> OperationStack;
+    [System.NonSerialized]
+    public Dictionary<int, Report> Archive;
 
     public Bureau()
     {
@@ -56,21 +58,17 @@ public class Bureau {
         { return o.OperationTime <= 0; });
     }
 
-    internal void PrepareToSave()
+    public void OnBeforeSerialize()
     {
         operationStack = new int[OperationStack.Count];
         while (OperationStack.Count > 0)
             operationStack[OperationStack.Count - 1] = OperationStack.Pop();
     }
 
-    internal void InitAfterLoad()
+    public void OnAfterDeserialize()
     {
         OperationStack = new Stack<int>();
         for (int i = 0; i < operationStack.Length; i++)
             OperationStack.Push(operationStack[i]);
-        foreach (var item in CurrentOperations)
-        {
-            item.InitAfterLoad();
-        }
     }
 }

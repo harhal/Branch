@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,13 +45,5 @@ public class Researches
             result[i] = GameData.Data.LevelsData.GetResearchesPointsByProperty((int)Properties[i]);
         }
         return result;
-    }
-
-    internal void PrepareToSave()
-    {
-    }
-
-    internal void InitAfterLoad()
-    {
     }
 }

@@ -10,7 +10,7 @@ struct HumanGeneratorItem
 }
 
 [System.Serializable]
-class HumanGeneratorArray
+class HumanGeneratorArray: ISerializationCallbackReceiver
 {
     [SerializeField]
     HumanGeneratorItem[] Items;
@@ -30,25 +30,6 @@ class HumanGeneratorArray
         Items = new HumanGeneratorItem[] { testItem };
     }
 
-    internal void InitAfterLoad()
-    {
-        var list = new List<string>();
-        MaleIndexRange = new RangeInt(list.Count, 0);
-        foreach (var item in Items)
-            if (item.Sex == Human.SexType.Male)
-                list.Add(item.Value);
-        FemaleIndexRange = new RangeInt(list.Count, 0);
-        foreach (var item in Items)
-            if (item.Sex == Human.SexType.NoMatter)
-                list.Add(item.Value);
-            MaleIndexRange.length = list.Count - MaleIndexRange.start;
-        foreach (var item in Items)
-            if (item.Sex == Human.SexType.Female)
-                list.Add(item.Value);
-        FemaleIndexRange.length = list.Count - FemaleIndexRange.start;
-        SortedItems = list.ToArray();
-    }
-
     public string GetItem(Human.SexType Sex)
     {
         switch (Sex)
@@ -66,6 +47,29 @@ class HumanGeneratorArray
                     return SortedItems[Random.Range(0, SortedItems.Length)];
                 }
         }
+    }
+
+    public void OnBeforeSerialize()
+    {
+    }
+
+    public void OnAfterDeserialize()
+    {
+        var list = new List<string>();
+        MaleIndexRange = new RangeInt(list.Count, 0);
+        foreach (var item in Items)
+            if (item.Sex == Human.SexType.Male)
+                list.Add(item.Value);
+        FemaleIndexRange = new RangeInt(list.Count, 0);
+        foreach (var item in Items)
+            if (item.Sex == Human.SexType.NoMatter)
+                list.Add(item.Value);
+        MaleIndexRange.length = list.Count - MaleIndexRange.start;
+        foreach (var item in Items)
+            if (item.Sex == Human.SexType.Female)
+                list.Add(item.Value);
+        FemaleIndexRange.length = list.Count - FemaleIndexRange.start;
+        SortedItems = list.ToArray();
     }
 }
 
@@ -96,12 +100,5 @@ public class HumanGenerator
         if (Sex == Human.SexType.NoMatter)
             Sex = Random.Range(0, 2) == 0 ? Human.SexType.Male : Human.SexType.Female;
         return new Human(FirstNames.GetItem(Sex) + ' ' + LastNames.GetItem(Sex), Sex, Faces.GetItem(Sex));
-    }
-
-    internal void InitAfterLoad()
-    {
-        FirstNames.InitAfterLoad();
-        LastNames.InitAfterLoad();
-        Faces.InitAfterLoad();
     }
 }

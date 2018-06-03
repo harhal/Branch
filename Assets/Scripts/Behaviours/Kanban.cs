@@ -11,7 +11,7 @@ public class Kanban : MonoBehaviour
     public static Kanban Board;
 
     //AnomalObject
-    public event InvokedAction OnNewAnomalObject;
+    /*public event InvokedAction OnNewAnomalObject;
     public event InvokedAction OnAnomalObjectMissed;
     public event InvokedAction OnAnomalObjectMoved;
     public event InvokedAction OnResearchesUpdated;
@@ -64,7 +64,7 @@ public class Kanban : MonoBehaviour
     public void OperativeDied(string Description, object Invoker) { OnOperativeDied(Description, Invoker); }
     public void DPersonnelHired(string Description, object Invoker) { OnDPersonnelHired(Description, Invoker); }
     public void DPersonnelDied(string Description, object Invoker) { OnDPersonnelDied(Description, Invoker); }
-    public void Defeat(string Description) { OnDefeat(Description); }
+    public void Defeat(string Description) { OnDefeat(Description); }*/
 
     void Awake()
     {

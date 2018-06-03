@@ -12,7 +12,6 @@ public class GameData : MonoBehaviour {
     {
         string json = System.IO.File.OpenText(path).ReadToEnd();
         var gameData = JsonUtility.FromJson<PackagedGameData>(json);
-        gameData.InitAfterLoad();
         Data = gameData;
     }
 
@@ -35,7 +34,7 @@ public class GameData : MonoBehaviour {
 }
 
 [System.Serializable]
-public class PackagedGameData
+public class PackagedGameData: ISerializationCallbackReceiver
 {
     public LevelsData LevelsData;
     [SerializeField]
@@ -54,7 +53,11 @@ public class PackagedGameData
         HumanGenerator = new HumanGenerator();
     }
 
-    internal void InitAfterLoad()
+    public void OnBeforeSerialize()
+    {
+    }
+
+    public void OnAfterDeserialize()
     {
         AnomalObjects = new Dictionary<int, AnomalObject>();
         if (anomalObjects != null)
@@ -62,6 +65,5 @@ public class PackagedGameData
             {
                 AnomalObjects.Add(item.ID, item);
             }
-        HumanGenerator.InitAfterLoad();
     }
 }

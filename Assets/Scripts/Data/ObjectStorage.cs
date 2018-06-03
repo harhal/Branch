@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class ObjectStorage : Building {
+public class ObjectStorage : Building, iTimeEventReason, ISerializationCallbackReceiver
+{
 
     public int ID;
     [SerializeField]
@@ -171,7 +172,11 @@ public class ObjectStorage : Building {
         }
     }
 
-    internal override void InitAfterLoad()
+    public void OnBeforeSerialize()
+    {
+    }
+
+    public void OnAfterDeserialize()
     {
         foreach (var item in Scientists)
             GetHumanByID(item).Destination = this;
@@ -179,5 +184,20 @@ public class ObjectStorage : Building {
             GetHumanByID(item).Destination = this;
         foreach (var item in Liquidators)
             GetHumanByID(item).Destination = this;
+    }
+
+    public bool IsActual()
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OpenUI()
+    {
+        throw new NotImplementedException();
+    }
+
+    public int GetID()
+    {
+        return ID;
     }
 }
