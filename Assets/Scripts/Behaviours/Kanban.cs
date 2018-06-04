@@ -41,30 +41,30 @@ public class Kanban : MonoBehaviour
     //General
     public event Action OnDefeat;
 
-    public void NewAnomalObject(string Description, object Invoker) { OnNewAnomalObject(Description, Invoker); }
-    public void AnomalObjectMissed(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); }
-    public void AnomalObjectMoved(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); }
-    public void ResearchesUpdated(string Description, object Invoker) { OnResearchesUpdated(Description, Invoker); }
-    public void ContaintmentBreach(string Description, object Invoker) { OnContaintmentBreach(Description, Invoker); }
-    public void ContaintmentRestored(string Description, object Invoker) { OnContaintmentRestored(Description, Invoker); }
-    public void BuildingProcessStarted(string Description, object Invoker) { OnBuildingProcessStarted(Description, Invoker); }
-    public void BuildingProcessIsOver(string Description, object Invoker) { OnBuildingProcessIsOver(Description, Invoker); }
-    public void ObjectStorageDestroyed(string Description, object Invoker) { OnObjectStorageDestroyed(Description, Invoker); }
-    public void FirstIncedentReport(string Description, object Invoker) { OnFirstIncedentReport(Description, Invoker); }
-    public void InvestigationStarted(string Description, object Invoker) { OnInvestigationStarted(Description, Invoker); }
-    public void InvestigationStopped(string Description, object Invoker) { OnInvestigationStopped(Description, Invoker); }
-    public void CaptureOperationReadyToStart(string Description, object Invoker) { OnCaptureOperationReadyToStart(Description, Invoker); }
-    public void CaptureOperationStarted(string Description, object Invoker) { OnCaptureOperationStarted(Description, Invoker); }
-    public void CaptureOperationIsOver(string Description, object Invoker) { OnCaptureOperationIsOver(Description, Invoker); }
-    public void AgentHired(string Description, object Invoker) { OnAgentHired(Description, Invoker); }
-    public void AgentDied(string Description, object Invoker) { OnAgentDied(Description, Invoker); }
-    public void ScientistHired(string Description, object Invoker) { OnScientistHired(Description, Invoker); }
-    public void ScientistDied(string Description, object Invoker) { OnScientistDied(Description, Invoker); }
-    public void OperativeHired(string Description, object Invoker) { OnOperativeHired(Description, Invoker); }
-    public void OperativeDied(string Description, object Invoker) { OnOperativeDied(Description, Invoker); }
-    public void DPersonnelHired(string Description, object Invoker) { OnDPersonnelHired(Description, Invoker); }
-    public void DPersonnelDied(string Description, object Invoker) { OnDPersonnelDied(Description, Invoker); }
-    public void Defeat(string Description) { OnDefeat(Description); }
+    public void NewAnomalObject(string Description, object Invoker) { OnNewAnomalObject(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 15; }
+    public void AnomalObjectMissed(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -20; }
+    public void AnomalObjectMoved(string Description, object Invoker) { OnAnomalObjectMoved(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void ResearchesUpdated(string Description, object Invoker) { OnResearchesUpdated(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 3; }
+    public void ContaintmentBreach(string Description, object Invoker) { OnContaintmentBreach(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -9; }
+    public void ContaintmentRestored(string Description, object Invoker) { OnContaintmentRestored(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 6; }
+    public void BuildingProcessStarted(string Description, object Invoker) { OnBuildingProcessStarted(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void BuildingProcessIsOver(string Description, object Invoker) { OnBuildingProcessIsOver(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void ObjectStorageDestroyed(string Description, object Invoker) { OnObjectStorageDestroyed(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -10; }
+    public void FirstIncedentReport(string Description, object Invoker) { OnFirstIncedentReport(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void InvestigationStarted(string Description, object Invoker) { OnInvestigationStarted(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void InvestigationStopped(string Description, object Invoker) { OnInvestigationStopped(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void CaptureOperationReadyToStart(string Description, object Invoker) { OnCaptureOperationReadyToStart(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void CaptureOperationStarted(string Description, object Invoker) { OnCaptureOperationStarted(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void CaptureOperationIsOver(string Description, object Invoker) { OnCaptureOperationIsOver(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 0; }
+    public void AgentHired(string Description, object Invoker) { OnAgentHired(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 7; }
+    public void AgentDied(string Description, object Invoker) { OnAgentDied(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -7; }
+    public void ScientistHired(string Description, object Invoker) { OnScientistHired(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 8; }
+    public void ScientistDied(string Description, object Invoker) { OnScientistDied(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -8; }
+    public void OperativeHired(string Description, object Invoker) { OnOperativeHired(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 5; }
+    public void OperativeDied(string Description, object Invoker) { OnOperativeDied(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -5; }
+    public void DPersonnelHired(string Description, object Invoker) { OnDPersonnelHired(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += 1; }
+    public void DPersonnelDied(string Description, object Invoker) { OnDPersonnelDied(Description, Invoker); SessionData.Data.ResourceStorage.Reputation += -1; }
+    public void Defeat(string Description) { OnDefeat(Description); SessionData.Data.ResourceStorage.Reputation += 0; }
 
     void Awake()
     {

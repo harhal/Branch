@@ -103,6 +103,8 @@ public class AnomalObject
             }
         }
         SessionData.Data.Researches.Research(Properties * ResearchPoints, this);
+        for (int i = 0; i < ImpactFactors.FieldsCount; i++)
+            SessionData.Data.ResourceStorage.Reputation += Properties[i] * ResearchPoints * 0.1f;
     }
 
     public bool IsStable()

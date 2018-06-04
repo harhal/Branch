@@ -26,6 +26,11 @@ public class TimeController : MonoBehaviour {
 
     void Update ()
     {
+        if (SessionData.Data.ResourceStorage.Reputation <= 0)
+        {
+            PauseText.text = "Defeat";
+            Time.timeScale = 0;
+        }
         PauseText.gameObject.SetActive(Time.timeScale == 0);
         if (Time.timeScale == 0)
         {

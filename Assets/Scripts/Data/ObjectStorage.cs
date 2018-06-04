@@ -161,6 +161,7 @@ public class ObjectStorage : Building {
                     GameData.Data.LevelsData.UnprotectedPointChaosLevelTick * UnprotectedProperties) * Time.deltaTime;
             else
                 ChaosLevel = GameData.Data.LevelsData.MaxChaosLevel;
+            SessionData.Data.ResourceStorage.Reputation -= 1 * Time.deltaTime;
             foreach (var liquidator in Liquidators)
             {
                 if (GetHumanByID(liquidator).Activity == Human.ActivityType.Working)

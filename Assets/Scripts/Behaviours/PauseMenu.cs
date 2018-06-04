@@ -14,7 +14,7 @@ public class PauseMenu : OverlayWindow {
         if (Menu == null)
             Menu = this;
         Hide();
-        Save.interactable = SessionData.ProfileName != "";
+        Save.interactable = SessionData.ProfileName != "" && SessionData.Data.ResourceStorage.Reputation > 0;
 	}
 
 	// Update is called once per frame
